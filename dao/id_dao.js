@@ -4,7 +4,7 @@ const IdDao = {
 	save(info,level){
 		info.reg_time = new Date();
 		if(level==0){//判断是否为普通用户注册
-			info.book = [];
+			info.cake = [];
 			return new User(info).save();
 		}else{//管理员账号注册
 			return new Manager(info).save();//存入集合操作
@@ -18,13 +18,13 @@ const IdDao = {
 		}
 	},
 	update(condition,info,level){
-		if(info.book){
-			info.book = JSON.parse(info.book);
-			if(info.book.length===0)
-			return User.update(condition,{book:[]});
-			const index = info.book.length-1;
-			if(!info.book[index].borrow_time)
-			info.book[index].borrow_time = new Date();
+		if(info.cake){
+			info.cake = JSON.parse(info.cake);
+			if(info.cake.length===0)
+			return User.update(condition,{cake:[]});
+			const index = info.cake.length-1;
+			if(!info.cake[index].borrow_time)
+			info.cake[index].borrow_time = new Date();
 		}
 		if(level==0){//判断是否为普通用户更新
 			return User.update(condition,info);

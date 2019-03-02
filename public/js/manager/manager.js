@@ -1,8 +1,8 @@
-function Book(){
+function Cake(){
 	this.addListener();
 	this.init();
 }
-$.extend(Book.prototype,{
+$.extend(Cake.prototype,{
 	tab:0,
 	init(){
 		$(".position-page").addClass("active").siblings().removeClass("active");
@@ -12,33 +12,45 @@ $.extend(Book.prototype,{
 	addListener(){
 		//点击翻页处理
 		$(".pagination").on("click",".page",this.loadByPageHandler.bind(this));
-		//添加图书
-		$(".btn-add-book").on("click",this.addBookHandler.bind(this));
+		//添加商品
+		$(".btn-add-cake").on("click",this.addCakeHandler.bind(this));
+		//添加店铺
+		$(".btn-add-store").on("click",this.addStoreHandler.bind(this));
 		//页面后退
 		$(".pagination").on("click",".previous",this.loadByPrevious.bind(this));
 		//页面前进
 		$(".pagination").on("click",".next",this.loadByNext.bind(this));
-		//删除职位
-		$("tbody").on("click",".removeBook",function(e){
+		//删除商品
+		$("tbody").on("click",".removeCake",function(e){
 			if(confirm("确认删除吗?")){
-				this.removeBookHandler(e.target);
+				this.removeCakeHandler(e.target);
 			}
 		}.bind(this));
-		//点击修改获取当前图书信息
-		$("tbody").on("click",".updateBook",this.nowId);
+		//删除店铺
+		$("tbody").on("click",".removeStore",function(e){
+			if(confirm("确认删除吗?")){
+				this.removeStoreHandler(e.target);
+			}
+		}.bind(this));
+		//点击修改获取当前商品信息
+		$("tbody").on("click",".updateCake",this.nowId);
 		//修改职位
-		$(".btn-update-book").on("click",this.updateBookHandler.bind(this));
+		$(".btn-update-cake").on("click",this.updateCakeHandler.bind(this));
 		//搜索类型
 		$(".chooseType").on("click","a",this.chooseType);
 		//搜索
-		$(".find").on("click",this.findBook.bind(this));
-		//重新加载全部图书信息
+		$(".find").on("click",this.findCake.bind(this));
+		//重新加载全部商品信息
 		$(".reload").on("click",this.init.bind(this));
 		//内容切换
 		$(".change-content").on("click","li",this.changeContent.bind(this));
 		
-		//查看借书详情
-		$(".user-table").on("click",".seemore",this.bookDetails.bind(this));
+		//查看订单详情
+		$(".user-table").on("click",".seemore",this.cakeDetails.bind(this));
+		//查看购物车详情
+		$(".user-table").on("click",".seecart",this.cakeCart.bind(this));
+		//查看商品评论详情
+		$(".cake-table").on("click",".seecomment",this.cakeComment.bind(this));
 		//增加管理员
 		$(".btn-add-manager").on("click",this.addManager.bind(this));
 		//获取当前管理员信息
@@ -76,28 +88,83 @@ $.extend(Book.prototype,{
 				this.error('注册管理员失败');
 			}
 		});
-	},	
-	bookDetails(e){
+	},
+	//订单信息
+	cakeDetails(e){
 		const src = e.target;
 		const name = $(src).parent().siblings(".username").html();
 		$.post("/api/find",{name,level:0},(data)=>{
 			if(data.res_code ===1){
 				//console.log(data.res_body);
-				if(data.res_body.data[0].book.length===0){
-					var html = `<p>该用户暂未借阅图书</p>`;
+				if(data.res_body.data[0].cake.length===0){
+					var html = `<p>该用户暂无订单</p>`;
 					$(".details-table").html(html);
 				}else{
-					var arr=data.res_body.data[0].book;
+					var arr=data.res_body.data[0].cake;
 					console.log(arr);
 					var html="";
 					for(var key in arr){
 						html+=`<tr>
 						<td>${arr[key].id}</td>
-						<td>${arr[key].bookname}</td>
-						<td>${arr[key].borrow_time}</td>
+						<td>${arr[key].cakename}</td>
+						<td>${arr[key].cakenum}</td>
+						<td>${arr[key].order_time}</td>
+						<td>${arr[key].state}</td>
 						</tr>`;
 					}
 					$(".details-table tbody").html(html);
+				}	
+			}
+		});
+	},
+	//购物车信息
+	cakeCart(e){
+		const src = e.target;
+		const name = $(src).parent().siblings(".username").html();
+		$.post("/api/find",{name,level:0},(data)=>{
+			if(data.res_code ===1){
+				console.log(">>>",data.res_body);
+				if(data.res_body.data[0].cart.length===0){
+					var html = `<p>该用户购物车为空</p>`;
+					$(".carts-table").html(html);
+				}else{
+					var arr=data.res_body.data[0].cart;
+					console.log(arr);
+					var html="";
+					for(var key in arr){
+						html+=`<tr>
+						<td>${arr[key].id}</td>
+						<td>${arr[key].cakename}</td>
+						<td>${arr[key].cakeprice}</td>
+						<td>${arr[key].cakenum}</td>
+						</tr>`;
+					}
+					$(".carts-table tbody").html(html);
+				}	
+			}
+		});
+	},
+	//商品评论信息
+	cakeComment(e){
+		const src = e.target;
+		const _id = $(src).parent().siblings(".id").html();
+		$.post("/api/cake/find",{_id},(data)=>{
+			if(data.res_code ===1){
+				console.log(">>>",data.res_body);
+				if(data.res_body.data[0].comment.length===0){
+					var html = `<p>该商品评论为空</p>`;
+					$(".comments-table").html(html);
+				}else{
+					var arr=data.res_body.data[0].comment;
+					console.log(arr);
+					var html="";
+					for(var key in arr){
+						html+=`<tr>
+						<td>${arr[key].id}</td>
+						<td>${arr[key].content}</td>
+						</tr>`;
+					}
+					$(".comments-table tbody").html(html);
 				}	
 			}
 		});
@@ -145,7 +212,7 @@ $.extend(Book.prototype,{
 	//加载页数
 	loadPage(){
 		if(this.tab ===0){
-			$.post("/api/book/findpage",(data)=>{
+			$.post("/api/cake/findpage",(data)=>{
 				this.page=data.res_body.data;
 				var html=`<li class="previous">
 					      <a href="javascript:void(0);" aria-label="Previous">
@@ -164,6 +231,25 @@ $.extend(Book.prototype,{
 				$(".pagination").html(html);
 			});
 		}else if(this.tab ===1){
+			$.post("/api/store/findpage",(data)=>{
+				this.page=data.res_body.data;
+				var html=`<li class="previous">
+					      <a href="javascript:void(0);" aria-label="Previous">
+					        <span aria-hidden="true">&laquo;</span>
+					      </a>
+					    </li>`;
+				for(var i=0;i<this.page;i++){
+					if(i==0) html+=`<li class="active page"><a href="javascript:void(0);">${i+1}</a></li>`;
+					else html+=`<li ><a class="page" href="javascript:void(0);">${i+1}</a></li>`;
+				}
+				html+=`<li class="next">
+					      <a href="javascript:void(0);" aria-label="Next">
+					        <span aria-hidden="true">&raquo;</span>
+					      </a>
+					    </li>`;
+				$(".pagination").html(html);
+			});
+		}else if(this.tab ===2){
 			$.post("/api/find",{name:"kry",level:0},(data)=>{
 				//console.log(data);
 				this.page = Math.ceil(data.res_body.data.length/3);
@@ -186,14 +272,14 @@ $.extend(Book.prototype,{
 		}
 		
 	},
-	//按页加载图书信息
+	//按页加载商品信息
 	loadByPage(page){
 		page=page||1;
 		//加载页面
 		//console.log(this.tab);
 		if(this.tab === 0){
-			//获取图书信息
-			$.post("/api/book/findbypage",{page},(data)=>{
+			//获取商品信息
+			$.post("/api/cake/findbypage",{page},(data)=>{
 			//console.log(data);
 			var html="";
 			data.res_body.data.forEach((curr,index)=>{
@@ -202,20 +288,42 @@ $.extend(Book.prototype,{
 							<td><img src="${curr.cover}" with="60"  height="60"}></td>
 							<td>${curr.name}</td>
 							<td>${curr.type}</td>
-							<td>${curr.number}</td>
 							<td>${curr.price}</td>
-							<td>${curr.publish}</td>
 							<td>
-								<a href="javascript:void(0);" title="" class="updateBook" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-								<a href="javascript:void(0);" title="" class="removeBook"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+								<button type="button" class="btn btn-primary seecomment" data-toggle="modal" data-target="#cakeCommetModal">查看详情</button>
+							</td>
+							<td>
+								<a href="javascript:void(0);" title="" class="updateCake" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								<a href="javascript:void(0);" title="" class="removeCake"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 							</td>
 						</tr>
 					`;
-					$(".book-table tbody").html(html);
+					$(".cake-table tbody").html(html);
 					$(".paginationHide").removeClass("hide");
 				});
 			});
-		}else if(this.tab===1){
+		}else if(this.tab === 1){
+			//获取店铺信息
+			$.post("/api/store/findbypage",{page},(data)=>{
+			//console.log(data);
+			var html="";
+			data.res_body.data.forEach((curr,index)=>{
+					html+=`<tr>
+	 						<td class="id">${curr._id}</td>
+							<td>${curr.name}</td>
+							<td>${curr.address}</td>
+							<td>${curr.tel}</td>
+							<td>
+								<a href="javascript:void(0);" title="" class="updateStore" data-toggle="modal" data-target="#updateModalStore"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								<a href="javascript:void(0);" title="" class="removeStore"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					`;
+					$(".store-table tbody").html(html);
+					$(".paginationHide").removeClass("hide");
+				});
+			});
+		}else if(this.tab===2){
 			//获取普通用户信息
 			$.post("/api/find",{page},(data)=>{
 			//console.log(data);
@@ -230,13 +338,16 @@ $.extend(Book.prototype,{
 							<td>
 							<button type="button" class="btn btn-primary seemore" data-toggle="modal" data-target="#userdetailModal">查看详情</button>
 							</td>
+							<td>
+							<button type="button" class="btn btn-primary seecart" data-toggle="modal" data-target="#usercartModal">查看详情</button>
+							</td>
 						</tr>
 					`;
 					$(".user-table tbody").html(html);
 					$(".paginationHide").removeClass("hide");
 				});
 			});
-		}else if(this.tab===2){
+		}else if(this.tab===3){
 			//获取管理员信息
 			var name=JSON.parse(sessionStorage.loginUser).name;
 			$.post("/api/find",{name,level:1},(data)=>{
@@ -287,10 +398,10 @@ $.extend(Book.prototype,{
 		$(".pagination").children("li:eq("+index+")").addClass("active").siblings().removeClass("active");
 		$(".new-pagination").children("li:eq("+index+")").addClass("active").siblings().removeClass("active");
 	},
-	//添加图书
-	addBookHandler(){
-		let formData=new FormData($(".add-book-form")[0]);
-		let url ="/api/book/publish";
+	//添加商品
+	addCakeHandler(){
+		let formData=new FormData($(".add-cake-form")[0]);
+		let url ="/api/cake/publish";
 		var _this=this;
 		$.ajax({
 			type:"post",
@@ -305,34 +416,77 @@ $.extend(Book.prototype,{
 				if(data.res_code===1){
 					_this.loadByPage();
 					_this.loadPage();
-					_this.success('添加图书成功');
+					_this.success('添加商品成功');
 				}else{
-					_this.error('添加图书失败');
+					_this.error('添加商品失败');
 				}
 			}
 		});
 	},
-	//删除图书
-	removeBookHandler(e){
+	//添加店铺
+	addStoreHandler(){
+		console.log('>>>>>')
+		let formData=new FormData($(".add-store-form")[0]);
+		let url ="/api/store/publish";
+		var _this=this;
+		$.ajax({
+			type:"post",
+			url,
+			data:formData,
+			dataType:"json",
+			processData:false,
+			contentType:false,
+			success(data){
+				// 关闭模态框
+				$("#addModalStore").modal("hide");
+				if(data.res_code===1){
+					_this.loadByPage();
+					_this.loadPage();
+					_this.success('添加店铺成功');
+				}else{
+					_this.error('添加店铺失败');
+				}
+			}
+		});
+	},
+	//删除商品
+	removeCakeHandler(e){
 		var _id=$(e).parent().parent().siblings(".id").html();
 		//console.log(_id);
-		let url ="/api/book/delete";
+		let url ="/api/cake/delete";
 		$.post(url,{_id},(data)=>{
 			//console.log(data);
 			if(data.res_code==1){
 				this.loadByPage();
 				this.loadPage();
-				this.success('删除图书成功');
+				this.success('删除商品成功');
 			}else{
-				this.error('删除图书失败');
+				this.error('删除商品失败');
 			}
 			
 		});
 	},
-	//获取当前点击图书id
+	//删除店铺
+	removeStoreHandler(e){
+		var _id=$(e).parent().parent().siblings(".id").html();
+		console.log(_id);
+		let url ="/api/store/delete";
+		// $.post(url,{_id},(data)=>{
+		// 	//console.log(data);
+		// 	if(data.res_code==1){
+		// 		this.loadByPage();
+		// 		this.loadPage();
+		// 		this.success('删除店铺成功');
+		// 	}else{
+		// 		this.error('删除店铺失败');
+		// 	}
+			
+		// });
+	},
+	//获取当前点击商品id
 	nowId(){
 		var _id=$(this).parent().siblings(".id").html();
-		$(".update-book-form #updateBookId").val(_id);
+		$(".update-cake-form #updateCakeId").val(_id);
 	},
 	//获取当前点击管理员用户名
 	nowManager(){
@@ -342,10 +496,10 @@ $.extend(Book.prototype,{
 		$(".update-form #nowManagerAge").val($(this).parent().parent().children("td:eq(2)").html());
 		$(".update-form #nowManagerTel").val($(this).parent().parent().children("td:eq(3)").html());
 	},
-	//修改图书
-	updateBookHandler(){
-		let formData=new FormData($(".update-book-form")[0]);
-		let url ="/api/book/update";
+	//修改商品
+	updateCakeHandler(){
+		let formData=new FormData($(".update-cake-form")[0]);
+		let url ="/api/cake/update";
 		var _this=this;
 		$.ajax({
 			type:"post",
@@ -359,16 +513,16 @@ $.extend(Book.prototype,{
 				if(data.res_code===1){
 					_this.loadPage();
 					_this.loadByPage();
-					_this.success('修改图书成功');
+					_this.success('修改商品成功');
 				}else{
-					_this.error('修改图书失败');
+					_this.error('修改商品失败');
 				}
 				$("#updateModal").modal("hide");
 			}
 		});
 	},
-	//分类查找图书
-	findBook(){
+	//分类查找商品
+	findCake(){
 		let value=$(".findCondition").val();
 		if(!$(".thistype").attr("what"))
 		{var key = "_id";
@@ -380,7 +534,7 @@ $.extend(Book.prototype,{
 		obj.type=key;
 		
 		//console.log(obj);
-		let url ="/api/book/find";
+		let url ="/api/cake/find";
 		$.post(url,obj,(data)=>{
 			//console.log(data);
 			//获取查询后的数据渲染页面
@@ -392,20 +546,18 @@ $.extend(Book.prototype,{
 							<td><img src="${curr.cover}" with="60"  height="60"}></td>
 							<td>${curr.name}</td>
 							<td>${curr.type}</td>
-							<td>${curr.number}</td>
 							<td>${curr.price}</td>
-							<td>${curr.publish}</td>
 							<td>
-								<a href="javascript:void(0);" title="" class="updateBook" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-								<a href="javascript:void(0);" title="" class="removeBook"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+								<a href="javascript:void(0);" title="" class="updateCake" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								<a href="javascript:void(0);" title="" class="removeCake"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 							</td>
 						</tr>
 					`;
-					$(".book-table tbody").html(html);
+					$(".cake-table tbody").html(html);
 					$(".paginationHide").addClass("hide");
 				});
 			}else{
-				this.error('没有查询的图书');
+				this.error('没有查询的商品');
 			}
 		});
 	},
@@ -416,9 +568,10 @@ $.extend(Book.prototype,{
 		$(src).addClass("active").siblings().removeClass("active");
 		var index=$(src).index();
 		this.tab = index;
-		if(index==0) $(".book_manage").css("display","block").siblings("div").css("display","none");
-		else if(index==1) $(".message_manage").css("display","block").siblings("div").css("display","none");
-		else if(index==2) $(".person_manage").css("display","block").siblings("div").css("display","none");
+		if(index==0) $(".cake_manage").css("display","block").siblings("div").css("display","none");
+		else if(index==1) $(".store_manage").css("display","block").siblings("div").css("display","none");
+		else if(index==2) $(".message_manage").css("display","block").siblings("div").css("display","none");
+		else if(index==3) $(".person_manage").css("display","block").siblings("div").css("display","none");
 		else $(".pwd_manage").css("display","block").siblings("div").css("display","none");
 		this.loadByPage(1);
 		this.loadPage();
@@ -443,4 +596,4 @@ $.extend(Book.prototype,{
 	}
 });
 
-new Book();
+new Cake();

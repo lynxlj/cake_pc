@@ -16,7 +16,7 @@ Header.template=`<nav class="navbar navbar-inverse" style="margin-bottom:10px !i
 	        <span class="icon-bar"></span>
 	      </button>
 	      <img src="/images/header.png" width="50" style="float:left">
-	      <a class="navbar-brand" href="#" style="margin-left:5px;">ZHsy图书管理系统</a>
+	      <a class="navbar-brand" href="#" style="margin-left:5px;">廿一客蛋糕后台管理系统</a>
 	    </div>
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

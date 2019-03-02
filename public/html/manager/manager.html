@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/libs/bootstrap/css/bootstrap.min.css">
-	<title>图书管理</title>
+	<title>商品管理</title>
 </head>
 <body>
 <!--头部引用-->
@@ -13,58 +13,98 @@
 	<content>
 		<!--列表导航-->
 		<ul class="nav nav-pills nav-stacked change-content" style="width: 200px;float: left;">
-		  <li role="presentation" class="active"><a href="javascript:void(0);"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;&nbsp;图书管理</a></li>
+			<li role="presentation" class="active"><a href="javascript:void(0);"><span class="glyphicon glyphicon-cake" aria-hidden="true"></span>&nbsp;&nbsp;商品管理</a></li>
+			<li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-cake" aria-hidden="true"></span>&nbsp;&nbsp;店铺管理</a></li>
 		  <li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;用户管理</a></li>
 		  <li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;个人管理</a></li>
 		  <li role="presentation "><a href="javascript:void(0);"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;&nbsp;修改密码</a></li>
 		</ul>
-		<!--图书信息管理-->
-		<div class="panel panel-primary book_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;">
-		  	<div class="panel-heading">
-		    	<h3 class="panel-title">图书管理</h3>
-		  	</div>
-		   	<div class="container-fluid" style="height: 50px;margin-top: 20px;">
-		   		<div class="btn-group" style="float: left;">
-					<button type="button" class="btn btn-primary dropdown-toggle thistype" data-toggle="dropdown" what:"_id" aria-haspopup="true" aria-expanded="false">图书编号<span class="caret"></span></button>
+		<!--商品信息管理-->
+		<div class="panel panel-primary cake_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;">
+			<div class="panel-heading">
+				<h3 class="panel-title">商品管理</h3>
+			</div>
+			<div class="container-fluid" style="height: 50px;margin-top: 20px;">
+				<div class="btn-group" style="float: left;">
+					<button type="button" class="btn btn-primary dropdown-toggle thistype" data-toggle="dropdown" what:"_id" aria-haspopup="true" aria-expanded="false">商品编号<span class="caret"></span></button>
 					<ul class="dropdown-menu chooseType">
-						<li><a class="_id" href="#">图书编号</a></li>
-					    <li><a class="name" href="#">图书名称</a></li>
-					    <li><a class="type" href="#">图书类型</a></li>
+						<li><a class="_id" href="#">商品编号</a></li>
+							<li><a class="name" href="#">商品名称</a></li>
+							<li><a class="type" href="#">商品类型</a></li>
 					</ul>
 				</div>
 				<div class="input-group col-lg-4" style="float: left;">
-				    <input type="text" class="form-control findCondition" placeholder="输入搜索内容">
-				    	<span class="input-group-btn">
-				        	<button class="btn btn-default find" type="button">搜索</button>
-				    	</span>
+						<input type="text" class="form-control findCondition" placeholder="输入搜索内容">
+							<span class="input-group-btn">
+									<button class="btn btn-default find" type="button">搜索</button>
+							</span>
 				</div>
-			    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" style="float: right;">添加</button>
-			    <button type="button" class="btn btn-primary reload" style="float: right;margin-right: 40px;" >重新加载全部图书信息</button>
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" style="float: right;">添加</button>
+				<button type="button" class="btn btn-primary reload" style="float: right;margin-right: 40px;" >重新加载全部商品信息</button>
 			</div>
 			<div class="panel-body">
-			  	<table class="table table-striped book-table">
-			    	<thead>
+				<table class="table table-striped cake-table">
+					<thead>
 						<tr>
-							<td>图书编号</td>
-							<td>封面</td>
-							<td>图书名称</td>
-							<td>图书类型</td>
-							<td>数量</td>
-							<td>价格</td>
-							<td>出版社</td>
+							<td>商品编号</td>
+							<td>商品图片</td>
+							<td>商品名称</td>
+							<td>商品类型</td>
+							<td>商品价格</td>
+							<td>商品评论</td>
 							<td>操作</td>
 						</tr>
 					</thead>
-	 				<tbody></tbody>
-	 			</table>
-	 		</div>
-			<!--分页按钮-->
-				<nav aria-label="Page navigation" class="paginationHide" style="position: absolute;bottom:4%;right: 5%;">
-					<ul class="pagination">
-					 </ul>
-				</nav>
+					<tbody></tbody>
+				</table>
 			</div>
-		  	
+			<!--分页按钮-->
+			<nav aria-label="Page navigation" class="paginationHide" style="position: absolute;bottom:4%;right: 5%;">
+				<ul class="pagination">
+					</ul>
+			</nav>
+		</div>
+		<!--店铺信息管理-->
+		<div class="panel panel-primary store_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
+				<div class="panel-heading">
+						<h3 class="panel-title">店铺管理</h3>
+					</div>
+					<div class="container-fluid" style="height: 50px;margin-top: 20px;">
+						<div class="btn-group" style="float: left;">
+							<button type="button" class="btn btn-primary dropdown-toggle thistype" data-toggle="dropdown" what:"_id" aria-haspopup="true" aria-expanded="false">店铺编号<span class="caret"></span></button>
+							<ul class="dropdown-menu chooseType">
+								<li><a class="_id" href="#">店铺编号</a></li>
+									<li><a class="name" href="#">店铺名称</a></li>
+							</ul>
+						</div>
+						<div class="input-group col-lg-4" style="float: left;">
+								<input type="text" class="form-control findCondition" placeholder="输入搜索内容">
+									<span class="input-group-btn">
+											<button class="btn btn-default find" type="button">搜索</button>
+									</span>
+						</div>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModalStore" style="float: right;">添加</button>
+						<button type="button" class="btn btn-primary reload" style="float: right;margin-right: 40px;" >重新加载全部店铺信息</button>
+					</div>
+			<div class="panel-body">
+				<table class="table table-striped store-table">
+					<thead>
+						<tr>
+							<td>店铺编号</td>
+							<td>店铺名称</td>
+							<td>店铺地址</td>
+							<td>店铺电话</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<!--分页按钮-->
+			<nav aria-label="Page navigation" class="paginationHide" style="position: absolute;bottom:4%;right: 5%;">
+				<ul class="pagination">
+					</ul>
+			</nav>
 		</div>
 		<!--用户信息管理-->
 		<div class="panel panel-primary message_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
@@ -80,7 +120,8 @@
 							<td>年龄</td>
 							<td>电话</td>
 							<td>注册时间</td>
-							<td>借书信息</td>
+							<td>订单信息</td>
+							<td>购物车信息</td>
 						</tr>
 					</thead>
 	 				<tbody></tbody>
@@ -126,7 +167,7 @@
 			    <h3 class="panel-title">修改密码</h3>
 			</div>
 			<div class="panel-body">
-			    <form class="password-form" style="width: 500px;margin: 50px auto;padding: 50px;border: 2px solid #337AB7;border-radius: 10px;">
+			    <form class="password-form" style="width: 500px;margin: 50px auto;padding: 50px;border: 2px solid #442818;border-radius: 10px;">
 				  <div class="form-group">
 				    <label for="oldPwd">旧密码</label>
 				    <input type="password" class="form-control" name="oldPwd" placeholder="请输入原来密码">
@@ -147,112 +188,166 @@
 	<!--信息提示框-->
 	<div  style="position: fixed;top:10%;left:40%;width: 20%;" class="alert alert-danger hidden update-error">修改失败</div>
 		<div  style="position: fixed;top:10%;left:40%;width: 20%;" class="alert alert-success hidden update-success">修改成功</div>
-		<div>
-	<!-- 添加图书的模态框 -->
+	<div>
+	<!-- 添加商品的模态框 -->
 	<div class="modal fade" id="addModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-	        <h4 class="modal-title" id="addBookModalLabel">添加图书信息</h4>
+	        <h4 class="modal-title" id="addCakeModalLabel">添加商品信息</h4>
 	      </div>
 	      <div class="modal-body">
 	      	<div class="alert alert-danger hidden addpos-error">添加失败</div>
-	        <form class="add-book-form">
+	        <form class="add-cake-form">
 	        	<div class="form-group">
-			    <label for="addBookId">图书编码</label>
-			    <input type="text" class="form-control" name="_id" id="addBookId" placeholder="请输入图书编码">
+			    <label for="addCakeId">商品编码</label>
+			    <input type="text" class="form-control" name="_id" id="addCakeId" placeholder="请输入商品编码">
 			  </div>
 			  <div class="form-group">
-			    <label for="addBookCover">图书封面</label>
-			    <input type="file" class="form-control" name="cover" id="addBookCover">
+			    <label for="addCakeCover">商品图片</label>
+			    <input type="file" class="form-control" name="cover" id="addCakeCover">
 			  </div>
 			  <div class="form-group">
-			    <label for="addBookName">图书名称</label>
-			    <input type="text" class="form-control" name="name" id="addBookName" placeholder="请输入图书名称">
+			    <label for="addCakeName">商品名称</label>
+			    <input type="text" class="form-control" name="name" id="addCakeName" placeholder="请输入商品名称">
 			  </div>
 			  <div class="form-group">
-			    <label for="addBookType">图书类型</label>
-			    <input type="text" class="form-control" name="type" id="addBookType" placeholder="请输入图书类型">
+			    <label for="addCakeType">商品类型</label>
+			    <input type="text" class="form-control" name="type" id="addCakeType" placeholder="请输入商品类型">
 			  </div>
 			  <div class="form-group">
-			    <label for="addBookNumber">图书数量</label>
-			    <input type="text" class="form-control" name="number" id="addBookNumber" placeholder="请输入图书数量">
-			  </div>
-			  <div class="form-group">
-			    <label for="addBookPrice">图书价格</label>
-			    <input type="text" class="form-control" name="price" id="addBookPrice" placeholder="请输入图书价格">
-			  </div>
-			  <div class="form-group">
-			    <label for="addBookPublish">出版社</label>
-			    <input type="text" class="form-control" name="publish" id="addBookPublish" placeholder="请输入出版社">
+			    <label for="addCakePrice">商品价格</label>
+			    <input type="text" class="form-control" name="price" id="addCakePrice" placeholder="请输入商品价格">
 			  </div>
 			</form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	        <button type="button" class="btn btn-primary btn-add-book">添加</button>
+	        <button type="button" class="btn btn-primary btn-add-cake">添加</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
-	
-	<!-- 修改图书的模态框 -->
+	<!-- 添加店铺的模态框 -->
+	<div class="modal fade" id="addModalStore" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title" id="addCakeModalLabel">添加店铺信息</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger hidden addpos-error">添加失败</div>
+					<form class="add-store-form">
+						<div class="form-group">
+					<label for="addStoreId">店铺编码</label>
+					<input type="text" class="form-control" name="_id" id="addStoreId" placeholder="请输入店铺编码">
+				</div>
+				<div class="form-group">
+					<label for="addStoreName">店铺名称</label>
+					<input type="text" class="form-control" name="name" id="addStoreName" placeholder="请输入店铺名称">
+				</div>
+				<div class="form-group">
+					<label for="addStoreAddress">店铺地址</label>
+					<input type="text" class="form-control" name="address" id="addStoreAddress" placeholder="请输入店铺地址">
+				</div>
+				<div class="form-group">
+					<label for="addStoreTel">店铺电话</label>
+					<input type="text" class="form-control" name="tel" id="addStoreTel" placeholder="请输入店铺电话">
+				</div>
+			</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-add-store">添加</button>
+				</div>
+			</div>
+	</div>
+	</div>
+	<!-- 修改商品的模态框 -->
 	<div class="modal fade" id="updateModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-	        <h4 class="modal-title" id="updateBookModalLabel">修改图书信息</h4>
+	        <h4 class="modal-title" id="updateCakeModalLabel">修改商品信息</h4>
 	      </div>
 	      <div class="modal-body">
 	      	<div class="alert alert-danger hidden addpos-error">修改失败</div>
-	        <form class="update-book-form">
+	        <form class="update-cake-form">
 	        	<div class="form-group">
-			    <label for="updateBookId">图书编码</label>
-			    <input type="text" class="form-control" name="_id" id="updateBookId" readonly="readonly">
+			    <label for="updateCakeId">商品编码</label>
+			    <input type="text" class="form-control" name="_id" id="updateCakeId" readonly="readonly">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateBookCover">图书封面</label>
-			    <input type="file" class="form-control" name="cover" id="updateBookCover">
+			    <label for="updateCakeCover">商品封图片/label>
+			    <input type="file" class="form-control" name="cover" id="updateCakeCover">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateBookName">图书名称</label>
-			    <input type="text" class="form-control" name="name" id="updateBookName" placeholder="请输入图书名称">
+			    <label for="updateCakeName">商品名称</label>
+			    <input type="text" class="form-control" name="name" id="updateCakeName" placeholder="请输入商品名称">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateBookType">图书类型</label>
-			    <input type="text" class="form-control" name="type" id="updateBookType" placeholder="请输入图书类型">
+			    <label for="updateCakeType">商品类型</label>
+			    <input type="text" class="form-control" name="type" id="updateCakeType" placeholder="请输入商品类型">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateBookNumber">图书数量</label>
-			    <input type="text" class="form-control" name="number" id="updateBookNumber" placeholder="请输入图书数量">
-			  </div>
-			  <div class="form-group">
-			    <label for="updateBookPrice">图书价格</label>
-			    <input type="text" class="form-control" name="price" id="updateBookPrice" placeholder="请输入图书价格">
-			  </div>
-			  <div class="form-group">
-			    <label for="updateBookPublish">出版社</label>
-			    <input type="text" class="form-control" name="publish" id="updateBookPublish" placeholder="请输入出版社">
+			    <label for="updateCakePrice">商品价格</label>
+			    <input type="text" class="form-control" name="price" id="updateCakePrice" placeholder="请输入商品价格">
 			  </div>
 			</form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	        <button type="button" class="btn btn-primary btn-update-book">确认修改</button>
+	        <button type="button" class="btn btn-primary btn-update-cake">确认修改</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
-
+	<!-- 修改商品的模态框 -->
+	<div class="modal fade" id="updateModalStore" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title" id="updateStoreModalLabel">修改店铺信息</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger hidden addpos-error">修改失败</div>
+					<form class="update-cake-form">
+						<div class="form-group">
+					<label for="updateStoreId">店铺编码</label>
+					<input type="text" class="form-control" name="_id" id="updateStoreId" readonly="readonly">
+				</div>
+				<div class="form-group">
+					<label for="updateStoreName">店铺名称</label>
+					<input type="text" class="form-control" name="name" id="updateStoreName" placeholder="请输入店铺名称">
+				</div>
+				<div class="form-group">
+					<label for="updateStoreAddress">店铺类型</label>
+					<input type="text" class="form-control" name="type" id="updateStoreAddress" placeholder="请输入店铺类型">
+				</div>
+				<div class="form-group">
+					<label for="updateStoreTel">店铺电话</label>
+					<input type="text" class="form-control" name="price" id="updateStoreTel" placeholder="请输入店铺电话">
+				</div>
+			</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-update-cake">确认修改</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- 添加管理员的模态框 -->
 	<div class="modal fade" id="addmanagerModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-	        <h4 class="modal-title" id="addBookModalLabel">添加管理员账号</h4>
+	        <h4 class="modal-title" id="addCakeModalLabel">添加管理员账号</h4>
 	      </div>
 	      <div class="modal-body">
 	      	<div class="alert alert-danger hidden addmanager-error">添加失败</div>
@@ -286,27 +381,72 @@
 	    </div>
 	  </div>
 	</div>
-	<!-- 添加管理员的模态框 -->
+	<!-- 用户订单的模态框 -->
 	<div class="modal fade" id="userdetailModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-	        <h4 class="modal-title" id="addBookModalLabel">用户借书详情</h4>
+	        <h4 class="modal-title">用户订单详情</h4>
 	      </div>
 		      <table class="table table-striped details-table">
 			    	<thead>
-						<tr>
-							<td>图书编号</td>
-							<td>图书名</td>
-							<td>借阅时间</td>
-						</tr>
-					</thead>
+							<tr>
+								<td>商品编号</td>
+								<td>商品名</td>
+								<td>数量</td>
+								<td>下单时间</td>
+								<td>订单状态</td>
+							</tr>
+						</thead>
 	 				<tbody></tbody>
-	 			</table>
-	      </div>
+	 				</table>
 	    </div>
 	  </div>
+	</div>
+	<!-- 商品评论的模态框 -->
+	<div class="modal fade" id="cakeCommetModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+						<h4 class="modal-title">评论详情</h4>
+					</div>
+						<table class="table table-striped comments-table">
+							<thead>
+								<tr>
+									<td>评论编号</td>
+									<td>商品内容</td>
+								</tr>
+							</thead>
+						 <tbody></tbody>
+						 </table>
+				</div>
+			</div>
+		</div>
+	<!-- 用户购物车的模态框 -->
+	<div class="modal fade" id="usercartModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title">用户购物车详情</h4>
+				</div>
+					<table class="table table-striped carts-table">
+						<thead>
+							<tr>
+								<td>商品编号</td>
+								<td>商品名</td>
+								<td>商品价格</td>
+								<td>数量</td>
+							</tr>
+						</thead>
+					<tbody></tbody>
+					</table>
+			</div>
+		</div>
+	</div>
+
 	</div>
 	<!--修改管理员信息模态框-->
 	<div class="modal fade" id="updateManagerModal" tabindex="-1" role="dialog">

@@ -5,7 +5,7 @@ function User(){
 };
 $.extend(User.prototype,{
 	init(){
-		//图书信息
+		//商品信息
 		this.loadByPage(1);
 		this.loadPage();
 	},
@@ -83,57 +83,57 @@ $.extend(User.prototype,{
 		//搜索类型
 		$(".chooseType").on("click","a",this.chooseType);
 		//搜索
-		$(".find").on("click",this.findBook.bind(this));
-		//重新加载全部图书信息
+		$(".find").on("click",this.findCake.bind(this));
+		//重新加载全部商品信息
 		$(".reload").on("click",this.init.bind(this));
-		//借阅图书相关事件
-		$(".book-table tbody").on("click",".borrow",this.borrowBook.bind(this));
+		//借阅商品相关事件
+		$(".cake-table tbody").on("click",".borrow",this.borrowCake.bind(this));
 		//修改密码
 		$(".password-btn").on("click",this.changePassword.bind(this));
 		//还书按钮
-		$(".table-borrowBook").on("click",".returnBook",this.returnBook.bind(this));
+		$(".table-borrowCake").on("click",".returnCake",this.returnCake.bind(this));
 	},
-	returnBook(e){
+	returnCake(e){
 		const src = e.target,
 			 username = JSON.parse(sessionStorage.loginUser).name,
-			 bookid = $(src).parent().siblings(".bookId").html(),
+			 cakeid = $(src).parent().siblings(".cakeId").html(),
 			 data = {name:username,level:0};
 		$.post("/api/find",data,(data)=>{
 			if(data.res_code === 1){
-				let book = data.res_body.data[0].book;
-				for(var index in book){
-					if(book[index].id === bookid){
-						book.splice(index,1);
-						book = JSON.stringify(book);
-						//console.log(book);
-						$.post("/api/update",{name:username,book:book,level:0},(data)=>{
+				let cake = data.res_body.data[0].cake;
+				for(var index in cake){
+					if(cake[index].id === cakeid){
+						cake.splice(index,1);
+						cake = JSON.stringify(cake);
+						//console.log(cake);
+						$.post("/api/update",{name:username,cake:cake,level:0},(data)=>{
 							
 						//console.log(data);
 							if(data.res_code===1){
-								$.post("/api/book/find",{_id:bookid},(data)=>{
+								$.post("/api/cake/find",{_id:cakeid},(data)=>{
 									//console.log(data);
 									var number = ++data.res_body.data[0].number;
-									$.post("/api/book/update",{_id:bookid,number},(data)=>{
+									$.post("/api/cake/update",{_id:cakeid,number},(data)=>{
 										if(data.res_code===1){
 											//归还成功
 											this.borrowDtails()
-											this.success("归还图书成功");
+											this.success("归还商品成功");
 										}else{
 											//还书失败
-											this.error("归还图书失败");
+											this.error("归还商品失败");
 										}
 									})
 								});	
 							}else{
 								//还书失败
-								this.error("归还图书失败");
+								this.error("归还商品失败");
 							}
 						});
 					}
 				}
 			}else{
 				//还书失败
-				this.error("归还图书失败");
+				this.error("归还商品失败");
 			}
 		});
 	},
@@ -160,17 +160,17 @@ $.extend(User.prototype,{
 		const name = JSON.parse(sessionStorage.loginUser).name;
 		$.post("/api/find",{name,level:0},(data)=>{
 			if(data.res_code === 1){
-				const book = data.res_body.data[0].book;
+				const cake = data.res_body.data[0].cake;
 				let html = '';
-				for(var index in book){
+				for(var index in cake){
 					html+=`<tr>
-								<td class="bookId">${book[index].id}</td>
-								<td>${book[index].bookname}</td>
-								<td>${book[index].borrow_time}</td>
-								<td><a class="returnBook" href="javascript:void">还书</a></td>
+								<td class="cakeId">${cake[index].id}</td>
+								<td>${cake[index].cakename}</td>
+								<td>${cake[index].borrow_time}</td>
+								<td><a class="returnCake" href="javascript:void">还书</a></td>
 							</tr>`;
 				}
-				$('.table-borrowBook tbody').html(html);
+				$('.table-borrowCake tbody').html(html);
 			}
 		});
 	},
@@ -205,9 +205,9 @@ $.extend(User.prototype,{
 		}
 		
 	},
-	//加载图书页数
+	//加载商品页数
 	loadPage(){
-		$.post("/api/book/findpage",(data)=>{
+		$.post("/api/cake/findpage",(data)=>{
 			this.page=data.res_body.data;
 			var html=`<li class="previous">
 				      <a href="javascript:void(0);" aria-label="Previous">
@@ -226,18 +226,18 @@ $.extend(User.prototype,{
 			$(".pagination").html(html);
 		});
 	},
-	//按页加载图书信息
+	//按页加载商品信息
 	loadByPage(page){
 		page=page||1;
 		//加载页面
-		$.post("/api/book/findbypage",{page},(data)=>{
+		$.post("/api/cake/findbypage",{page},(data)=>{
 			//console.log(data);
 			var html="";
 			data.res_body.data.forEach((curr,index)=>{
 				html+=`<tr>
  						<td class="id">${curr._id}</td>
 						<td><img src="${curr.cover}" with="60"  height="60"}></td>
-						<td class="bookname">${curr.name}</td>
+						<td class="cakename">${curr.name}</td>
 						<td>${curr.type}</td>
 						<td class="number">${curr.number}</td>
 						<td>${curr.price}</td>
@@ -247,13 +247,13 @@ $.extend(User.prototype,{
 						</td>
 					</tr>
 				`;
-				$(".book-table tbody").html(html);
+				$(".cake-table tbody").html(html);
 				$(".paginationHide").removeClass("hide");
 			});
 
 		});
 	},
-	//图书翻页处理
+	//商品翻页处理
 	loadByPageHandler(e){
 		const src=e.target;
 		const page=Number($(src).text())||1;
@@ -285,8 +285,8 @@ $.extend(User.prototype,{
 		$(".thistype").attr("what",type);
 		$(".thistype").html(aaa+"<span class='caret'></span>");
 	},
-	//分类查找图书
-	findBook(){
+	//分类查找商品
+	findCake(){
 		let value=$(".findCondition").val();
 		if(!$(".thistype").attr("what")) var key="_id";
 		else var key=$(".thistype").attr("what");
@@ -294,7 +294,7 @@ $.extend(User.prototype,{
 		obj.info=value;
 		obj.type=key;
 		//console.log(obj);
-		let url ="/api/book/find";
+		let url ="/api/cake/find";
 		$.post(url,obj,(data)=>{
 			//console.log(data);
 			//获取查询后的数据渲染页面
@@ -304,7 +304,7 @@ $.extend(User.prototype,{
 					html+=`<tr>
 	 						<td class="id">${curr._id}</td>
 							<td><img src="${curr.cover}" with="60"  height="60"}></td>
-							<td class="bookname">${curr.name}</td>
+							<td class="cakename">${curr.name}</td>
 							<td>${curr.type}</td>
 							<td class="number">${curr.number}</td>
 							<td>${curr.price}</td>
@@ -314,7 +314,7 @@ $.extend(User.prototype,{
 							</td>
 						</tr>
 					`;
-					$(".book-table tbody").html(html);
+					$(".cake-table tbody").html(html);
 					$(".paginationHide").addClass("hide");
 				});
 			}else{
@@ -325,59 +325,59 @@ $.extend(User.prototype,{
 		});
 	},
 	//借书
-	borrowBook(e){
+	borrowCake(e){
 		
-		//获取当前图书编码
+		//获取当前商品编码
 		const src = e.target;
 		var _id=$(src).parent().siblings(".id").html();
 		const _this = this;
-		var bookname=$(src).parent().siblings(".bookname").html();
-		//获取当前图书数量
+		var cakename=$(src).parent().siblings(".cakename").html();
+		//获取当前商品数量
 		var number=$(src).parent().siblings(".number").html();
 		//console.log(number);
-		//记录修改前的图书
+		//记录修改前的商品
 		var lastNum=number;
-		//图书数量减少一个
+		//商品数量减少一个
 		if(number<1) {
 			number=0;
-			this.error("该书库存数量不足，请借阅其他图书");
+			this.error("该书库存数量不足，请借阅其他商品");
 		}
 		else number--;
-		//将借阅图书存入用户数据库
+		//将借阅商品存入用户数据库
 		const username = JSON.parse(sessionStorage.loginUser).name;
 		$.post("/api/find",{name:username,level:0},(data)=>{
 			if (data.res_code === 1) {
-				var book = data.res_body.data[0].book;
-				for(var index in book){
-					if(book[index].id === _id){
-						_this.error("已借阅该图书，不可再次借阅！");
+				var cake = data.res_body.data[0].cake;
+				for(var index in cake){
+					if(cake[index].id === _id){
+						_this.error("已借阅该商品，不可再次借阅！");
 							return ;
 					}
 					
 				}
-				book.push({
+				cake.push({
 					id:_id,
-					bookname:bookname
+					cakename:cakename
 				});
-				book = JSON.stringify(book);
-				$.post("/api/update",{name:username,book:book,level:0},(data)=>{
+				cake = JSON.stringify(cake);
+				$.post("/api/update",{name:username,cake:cake,level:0},(data)=>{
 					//console.log(data);
 					if(data.res_code===1){
 						//改变用户的借书信息
-						//改变数据库图书数据
-						let url ="/api/book/update";
+						//改变数据库商品数据
+						let url ="/api/cake/update";
 						$.post(url,{_id,number},function(data){
 							if(data.res_code===1){
 								$(src).parent().siblings(".number").html(number);
-								 sessionStorage.loginUser.book = JSON.parse(book);
-								// console.log(book);
-								 _this.success("借阅图书成功");
+								 sessionStorage.loginUser.cake = JSON.parse(cake);
+								// console.log(cake);
+								 _this.success("借阅商品成功");
 							}else{
-								_this.error("借阅图书失败");
+								_this.error("借阅商品失败");
 							}
 						});
 					}else{
-						_this.error("借阅图书失败");
+						_this.error("借阅商品失败");
 					}
 				});
 			}

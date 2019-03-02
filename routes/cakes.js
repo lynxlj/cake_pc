@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var BookService=require("../services/book_service.js");
+var CakeService=require("../services/cake_service.js");
 var path=require("path");
 var multer=require("multer");
 
@@ -16,18 +16,18 @@ var storage = multer.diskStorage({
  
 var upload = multer({ storage: storage })
 
-//发布图书
-router.post("/publish",upload.single("cover"),BookService.publish);
-//按页查找图书
-router.post("/findbypage",BookService.findByPage);
+//发布商品
+router.post("/publish",upload.single("cover"),CakeService.publish);
+//按页查找商品
+router.post("/findbypage",CakeService.findByPage);
 //查找总页数
-router.post("/findpage",BookService.findPage);
+router.post("/findpage",CakeService.findPage);
 //删除职位
-router.post("/delete",BookService.remove);
+router.post("/delete",CakeService.remove);
 //修改职位
-router.post("/update",upload.single("cover"),BookService.update);
-//按条件查找图书
-router.post("/find",BookService.find);
+router.post("/update",upload.single("cover"),CakeService.update);
+//按条件查找商品
+router.post("/find",CakeService.find);
 
 
 module.exports = router;

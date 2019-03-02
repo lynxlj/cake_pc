@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb://localhost/booksystem");
+mongoose.connect("mongodb://localhost/cakesystem",{ useNewUrlParser: true });
 
 const userSchema = new mongoose.Schema({
 	name:String,
@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
 	tel:Number,
 	sex:String,
 	age:Number,
-	book:Array,
+	cake:Array,
+	cart:Array,
 	reg_time:Date
 });
 
@@ -21,21 +22,28 @@ const managerSchema = new mongoose.Schema({
 	reg_time:Date
 });
 
-const bookSchema = new mongoose.Schema({
+const cakeSchema = new mongoose.Schema({
 	_id:String,
 	name:String,
 	type:String,
-	number:Number,
 	price:Number,
-	publish:String,
-	cover:String
+	cover:String,
+	comment:Array,
+});
+
+const storeSchema = new mongoose.Schema({
+	_id:String,
+	name:String,
+	address:String,
+	tel:Number,
 });
 
 
 const User = mongoose.model('user',userSchema);
 const Manager = mongoose.model('manager',managerSchema);
-const Book = mongoose.model('book',bookSchema);
+const Cake = mongoose.model('cake',cakeSchema);
+const Store = mongoose.model('store',storeSchema);
 
 //导出模型
 
-module.exports = {User,Manager,Book};
+module.exports = {User,Manager,Cake,Store};

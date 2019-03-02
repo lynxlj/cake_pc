@@ -1,23 +1,25 @@
-图书管理系统
+商品管理系统
 一、登录界面
 用户/管理员
 账号：
 密码：
 
 二、用户界面
--图书详情（可借阅图书）
--用户信息（个人账号信息 可修改部分信息  图书借阅详情）
+-商品详情（
+-用户信息（个人账号信息 可修改部分信息 ）
 -密码修改
 
 三、管理员界面
--图书管理（可修改图书信息）
+-商品管理（可修改商品信息）
+-店铺管理（可修改商品信息）
+-订单管理（可修改商品信息）
 -用户管理（管理各个用户账号 可添加管理员）
 -密码修改
 
 ==========================================================
 
 
-数据库设计（bookSystem）
+数据库设计（cakeSystem）
 管理员表（manager）
 -name 主键
 -password
@@ -32,17 +34,23 @@
 -sex
 -age
 -tel
--book{bookid:number,bookid:number,bookid:number}
+-cake [{id,cakename,cakenum,order_time,state}]
+_cart [{id,cakename,cakeprice,cakenum}]
 -reg_time
 
-图书表（book）
+商品表（cake）
 -_id  主键(NO.xxxx)
--book_name
+-cake_name
 -type
--number
 -price
--publish
 -cover
+-comment
+
+店铺表（store）
+-_id  主键(NO.xxxx)
+-name
+-address
+-tel
 
 ==========================================================
 
@@ -116,14 +124,14 @@
 
 管理员 
 
-图书管理
+商品管理
 
-添加图书：
-	接口：/api/book/publish
+添加商品：
+	接口：/api/cake/publish
 	请求方式：POST
 	请求参数：
 		-_id  主键(NO.0001)
-		-book_name
+		-cake_name
 		-type
 		-number
 		-price
@@ -136,27 +144,24 @@
 			"res_body" : { // 响应主体
 				"data" : {
 					-_id  主键(NO.0001)
-					-book_name
+					-cake_name
 					-type
-					-number
 					-price
-					-publish
 					-cover
+					-comment
 				}
 			}
 		}
 
-修改图书信息：
-	接口：/api/book/update
+修改商品信息：
+	接口：/api/cake/update
 	请求方式：POST
 	请求参数：
 		-_id  主键(NO.0001)
-		-book_name
+		-cake_name
 		-type
-		-number
 		-price
 		-publish
-		-cover
 	返回JSON：
 		{
 			"res_code" : 1, // 1表示修改成功，否则失败
@@ -164,21 +169,19 @@
 			"res_body" : { // 响应主体
 				"data" : {
 					-_id  主键(NO.0001)
-					-book_name
+					-cake_name
 					-type
-					-number
 					-price
-					-publish
 					-cover
 				}
 			}
 		}
 
-删除图书：
-	接口：/api/book/delete
+删除商品：
+	接口：/api/cake/delete
 	请求方式：GET
 	请求参数：
-		_id - 待删除图书的主键值 编号
+		_id - 待删除商品的主键值 编号
 	返回JSON：
 		{
 			"res_code" : 1, // 1表示修改成功，否则失败
@@ -189,7 +192,7 @@
 		}
 
 获取总页码数：
-	接口：/api/book/findallpage
+	接口：/api/cake/findallpage
 		请求方式：GET
 		请求参数：
 		返回JSON：
@@ -202,7 +205,7 @@
 			}
 
 按页查询职位：
-	接口：/api/book/findbypage
+	接口：/api/cake/findbypage
 	请求方式：GET
 	请求参数：
 		page - 待查询的页码
@@ -214,21 +217,19 @@
 				"data" : [
 					{
 						-_id  主键(NO.0001)
-					-book_name
+					-cake_name
 					-type
-					-number
 					-price
-					-publish
 					-cover
+					-comment
 					},
 					{
 						-_id  主键(NO.0002)
-					-book_name
+					-cake_name
 					-type
-					-number
 					-price
-					-publish
 					-cover
+					-comment
 					},...
 				]
 			}

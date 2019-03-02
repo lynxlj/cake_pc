@@ -9,7 +9,7 @@ const IdService = {
 		.then((data)=>{
 			// 将用户信息保存到 session 中
 			//req.session.loginUser = data;
-			res.json({res_code:1,res_error:"",res_body:{data:{name:data.name,age:data.age,sex:data.sex,tel:data.tel,book:data.book,reg_time:data.reg_time}}});
+			res.json({res_code:1,res_error:"",res_body:{data:{name:data.name,age:data.age,sex:data.sex,tel:data.tel,cake:data.cake,reg_time:data.reg_time}}});
 		})
 		.catch((err)=>{
 			res.json({res_code: 0, res_error: err, res_body: {}});
@@ -17,14 +17,16 @@ const IdService = {
 	},
 	login(req,res,next){
 		var {name,password,level} = req.body;
+		console.log('===',req.body)
 		IdDao.login({name},level)
 		.then((data)=>{
 			if(data.length!=0){
 				const user = data[0];
+				console.log('>>>',data)
 				if(bcrypt.compareSync(password, user.password)){
 				// 将用户信息保存到 session 中
 				//req.session.loginUser = data;
-				res.json({res_code:1,res_error:"",res_body:{data:{name:user.name,age:user.age,sex:user.sex,tel:user.tel,reg_time:user.reg_time,book:user.book}}});	
+				res.json({res_code:1,res_error:"",res_body:{data:{name:user.name,age:user.age,sex:user.sex,tel:user.tel,reg_time:user.reg_time,cake:user.cake}}});	
 				}else{
 					res.json({res_code:0,res_error:"err",res_body:{}});
 				}				
@@ -64,14 +66,14 @@ const IdService = {
 			.catch((err)=>{
 				res.json({res_code: 0, res_error: err, res_body: {}});
 			});
-		}else if(req.body.book){
-			var {name,book,level} = req.body;
-			//res.json({book});
-			/*console.log(book);
-			if(!book){
-				book="[]";
+		}else if(req.body.cake){
+			var {name,cake,level} = req.body;
+			//res.json({cake});
+			/*console.log(cake);
+			if(!cake){
+				cake="[]";
 			}*/
-			IdDao.update({name},{book},level)
+			IdDao.update({name},{cake},level)
 			.then((data)=>{
 				res.json({res_code:1,res_error:"",res_body:{data:data}});
 			})
