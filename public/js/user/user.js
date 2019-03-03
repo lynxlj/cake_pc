@@ -86,8 +86,8 @@ $.extend(User.prototype,{
 		$(".find").on("click",this.findCake.bind(this));
 		//重新加载全部商品信息
 		$(".reload").on("click",this.init.bind(this));
-		//借阅商品相关事件
-		$(".cake-table tbody").on("click",".borrow",this.borrowCake.bind(this));
+		//加入商品相关事件
+		$(".cake-table tbody").on("click",".borrow",this.addToCart.bind(this));
 		//修改密码
 		$(".password-btn").on("click",this.changePassword.bind(this));
 		//还书按钮
@@ -155,19 +155,22 @@ $.extend(User.prototype,{
 		if(index===2) this.borrowDtails();
 		$(".box").eq(index).removeClass("hidden").siblings(".panel").addClass("hidden");
 	},
-	//借书详情列表
+	//购物车详情列表
 	borrowDtails(){
 		const name = JSON.parse(sessionStorage.loginUser).name;
 		$.post("/api/find",{name,level:0},(data)=>{
 			if(data.res_code === 1){
-				const cake = data.res_body.data[0].cake;
+				//console.log('cart',data.res_body.data[0].cart)
+				const cart = data.res_body.data[0].cart;
 				let html = '';
-				for(var index in cake){
+				for(var index in cart){
 					html+=`<tr>
-								<td class="cakeId">${cake[index].id}</td>
-								<td>${cake[index].cakename}</td>
-								<td>${cake[index].borrow_time}</td>
-								<td><a class="returnCake" href="javascript:void">还书</a></td>
+								<td class="cakeId">${cart[index].id}</td>
+								<td>${cart[index].cakename}</td>
+								<td>${cart[index].cakeprice}</td>
+								<td>${cart[index].cakenum}</td>
+								<td><a class="returnCake" href="javascript:void">+</a></td>
+								<td><a class="returnCake" href="javascript:void">-</a></td>
 							</tr>`;
 				}
 				$('.table-borrowCake tbody').html(html);
@@ -239,11 +242,9 @@ $.extend(User.prototype,{
 						<td><img src="${curr.cover}" with="60"  height="60"}></td>
 						<td class="cakename">${curr.name}</td>
 						<td>${curr.type}</td>
-						<td class="number">${curr.number}</td>
-						<td>${curr.price}</td>
-						<td>${curr.publish}</td>
+						<td class="cakeprice">${curr.price}</td>
 						<td>
-							<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>借阅</a>
+							<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>加入购物车</a>
 						</td>
 					</tr>
 				`;
@@ -306,11 +307,9 @@ $.extend(User.prototype,{
 							<td><img src="${curr.cover}" with="60"  height="60"}></td>
 							<td class="cakename">${curr.name}</td>
 							<td>${curr.type}</td>
-							<td class="number">${curr.number}</td>
-							<td>${curr.price}</td>
-							<td>${curr.publish}</td>
+							<td class="cakeprice">${curr.price}</td>
 							<td>
-								<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>借阅</a>
+								<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>加入购物车</a>
 							</td>
 						</tr>
 					`;
@@ -324,58 +323,65 @@ $.extend(User.prototype,{
 			}
 		});
 	},
-	//借书
-	borrowCake(e){
-		
+	//加入购物车
+	addToCart(e){
 		//获取当前商品编码
 		const src = e.target;
 		var _id=$(src).parent().siblings(".id").html();
 		const _this = this;
 		var cakename=$(src).parent().siblings(".cakename").html();
+		var cakeprice=$(src).parent().siblings(".cakeprice").html();
 		//获取当前商品数量
-		var number=$(src).parent().siblings(".number").html();
+		//var number=$(src).parent().siblings(".number").html();
 		//console.log(number);
 		//记录修改前的商品
-		var lastNum=number;
+		//var lastNum=number;
 		//商品数量减少一个
-		if(number<1) {
-			number=0;
-			this.error("该书库存数量不足，请借阅其他商品");
-		}
-		else number--;
+		// if(number<1) {
+		// 	number=0;
+		// 	this.error("该书库存数量不足，请借阅其他商品");
+		// }
+		// else number--;
 		//将借阅商品存入用户数据库
 		const username = JSON.parse(sessionStorage.loginUser).name;
 		$.post("/api/find",{name:username,level:0},(data)=>{
 			if (data.res_code === 1) {
-				var cake = data.res_body.data[0].cake;
-				for(var index in cake){
-					if(cake[index].id === _id){
-						_this.error("已借阅该商品，不可再次借阅！");
-							return ;
+				var cart = data.res_body.data[0].cart;
+				var isHave = false;
+				for(var index in cart){
+					if(cart[index].id === _id){
+						// _this.error("已借阅该商品，不可再次借阅！");
+						// 	return ;
+						isHave = true;
+						cart[index].cakenum = cart[index].cakenum+1;
 					}
 					
 				}
-				cake.push({
-					id:_id,
-					cakename:cakename
-				});
-				cake = JSON.stringify(cake);
-				$.post("/api/update",{name:username,cake:cake,level:0},(data)=>{
+				if(!isHave){
+					cart.push({
+						id:_id,
+						cakename:cakename,
+						cakeprice:cakeprice,
+						cakenum:1
+					});
+				}
+				cart = JSON.stringify(cart);
+				$.post("/api/update",{name:username,cart:cart,level:0},(data)=>{
 					//console.log(data);
 					if(data.res_code===1){
 						//改变用户的借书信息
 						//改变数据库商品数据
-						let url ="/api/cake/update";
-						$.post(url,{_id,number},function(data){
-							if(data.res_code===1){
-								$(src).parent().siblings(".number").html(number);
-								 sessionStorage.loginUser.cake = JSON.parse(cake);
-								// console.log(cake);
-								 _this.success("借阅商品成功");
-							}else{
-								_this.error("借阅商品失败");
-							}
-						});
+						//let url ="/api/cake/update";
+						// $.post(url,{_id,number},function(data){
+						// 	if(data.res_code===1){
+						// 		$(src).parent().siblings(".number").html(number);
+						// 		 sessionStorage.loginUser.cake = JSON.parse(cake);
+						// 		// console.log(cake);
+						// 		 _this.success("借阅商品成功");
+						// 	}else{
+						// 		_this.error("借阅商品失败");
+						// 	}
+						// });
 					}else{
 						_this.error("借阅商品失败");
 					}

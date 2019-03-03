@@ -34,23 +34,34 @@ $.extend(Cake.prototype,{
 		}.bind(this));
 		//点击修改获取当前商品信息
 		$("tbody").on("click",".updateCake",this.nowId);
-		//修改职位
+		//点击修改获取当前商品信息
+		$("tbody").on("click",".updateStore",this.nowStoreId);
+		//修改商品
 		$(".btn-update-cake").on("click",this.updateCakeHandler.bind(this));
+		//修改店铺
+		$(".btn-update-store").on("click",this.updateStoreHandler.bind(this));
 		//搜索类型
 		$(".chooseType").on("click","a",this.chooseType);
-		//搜索
+		//商品搜索
 		$(".find").on("click",this.findCake.bind(this));
+		//店铺搜索
+		$(".findStore").on("click",this.findStore.bind(this));
 		//重新加载全部商品信息
 		$(".reload").on("click",this.init.bind(this));
 		//内容切换
 		$(".change-content").on("click","li",this.changeContent.bind(this));
-		
 		//查看订单详情
 		$(".user-table").on("click",".seemore",this.cakeDetails.bind(this));
+		//修改订单状态
+		$(".details-table").on("click",".changeState",this.changeState.bind(this));
+		//删除订单
+		$(".details-table").on("click",".removeOrder",this.removeOrder.bind(this));		
 		//查看购物车详情
 		$(".user-table").on("click",".seecart",this.cakeCart.bind(this));
 		//查看商品评论详情
 		$(".cake-table").on("click",".seecomment",this.cakeComment.bind(this));
+		//删除评论
+		$(".comments-table").on("click",".removeComment",this.removeComment.bind(this))
 		//增加管理员
 		$(".btn-add-manager").on("click",this.addManager.bind(this));
 		//获取当前管理员信息
@@ -89,6 +100,95 @@ $.extend(Cake.prototype,{
 			}
 		});
 	},
+	//修改订单状态
+	changeState(e){
+		const src = e.target;
+		const name = $(src).parent().siblings(".username").html();
+		const orderId = $(src).parent().siblings(".id").html();
+		let state = $(src).parent().siblings(".state").html();
+		if(state == '已完成'){
+			return;
+		}
+		state = '已完成';
+		$(src).parent().siblings(".state").html('已完成')
+		console.log('change',state);
+		$.post("/api/find",{name,level:0},(data)=>{
+			console.log(data)
+			if(data.res_code ===1){
+				console.log('订单',data.res_body.data[0].cake);
+				var arr=data.res_body.data[0].cake;
+				for(var i=0;i<arr.length;i++){
+					if(arr[i].id == orderId){
+						arr[i].state = state;
+					}
+				}
+				cake = JSON.stringify(arr);
+				$.post("/api/update",{name:name,cake:cake,level:0},(data)=>{
+					console.log('修改订单状态',data);
+					if(data.res_code === 1){
+						this.success('修改状态成功');
+					}else{
+						this.error('删除状态失败');
+					}
+				});
+
+			}
+		});
+	},
+	//删除订单
+	removeOrder(e){
+		const src = e.target;
+		const name = $(src).parent().siblings(".username").html();
+		const orderId = $(src).parent().siblings(".id").html();
+		$.post("/api/find",{name,level:0},(data)=>{
+			console.log(data)
+			if(data.res_code ===1){
+				var arr=data.res_body.data[0].cake;
+				arr = arr.filter(function(item,index){
+					return item.id !== orderId;
+				})
+				cake = JSON.stringify(arr);
+				$.post("/api/update",{name:name,cake:cake,level:0},(data)=>{
+					console.log('删除订单',data)
+					if(data.res_code === 1){
+						this.success('删除订单成功');
+						$.post("/api/find",{name,level:0},(data)=>{
+							if(data.res_code ===1){
+								//console.log(data.res_body);
+								if(data.res_body.data[0].cake.length===0){
+									var html = `<p>该用户暂无订单</p>`;
+									$(".details-table tbody").html(html);
+								}else{
+									var arr=data.res_body.data[0].cake;
+									var html="";
+									for(var key in arr){
+										html+=`<tr>
+										<td class='username'>${name}</td>
+										<td class='id'>${arr[key].id}</td>
+										<td>${arr[key].cakename}</td>
+										<td>${arr[key].cakenum}</td>
+										<td>${arr[key].order_time}</td>
+										<td class='state'>${arr[key].state}</td>
+										<td>
+											<a href="javascript:void(0);" title="" class="changeState">修改订单状态</a>
+										</td>
+										<td>
+											<a href="javascript:void(0);" title="" class="removeOrder">删除订单</a>
+										</td>
+										</tr>`;
+									}
+									$(".details-table tbody").html(html);
+								}	
+							}
+						});
+					}else{
+						this.error('删除订单失败');
+					}
+				});
+
+			}
+		});
+	},
 	//订单信息
 	cakeDetails(e){
 		const src = e.target;
@@ -98,18 +198,24 @@ $.extend(Cake.prototype,{
 				//console.log(data.res_body);
 				if(data.res_body.data[0].cake.length===0){
 					var html = `<p>该用户暂无订单</p>`;
-					$(".details-table").html(html);
+					$(".details-table tbody").html(html);
 				}else{
 					var arr=data.res_body.data[0].cake;
-					console.log(arr);
 					var html="";
 					for(var key in arr){
 						html+=`<tr>
-						<td>${arr[key].id}</td>
+						<td class='username'>${name}</td>
+						<td class='id'>${arr[key].id}</td>
 						<td>${arr[key].cakename}</td>
 						<td>${arr[key].cakenum}</td>
 						<td>${arr[key].order_time}</td>
-						<td>${arr[key].state}</td>
+						<td class='state'>${arr[key].state}</td>
+						<td>
+							<a href="javascript:void(0);" title="" class="changeState">修改订单状态</a>
+						</td>
+						<td>
+							<a href="javascript:void(0);" title="" class="removeOrder">删除订单</a>
+						</td>
 						</tr>`;
 					}
 					$(".details-table tbody").html(html);
@@ -121,15 +227,14 @@ $.extend(Cake.prototype,{
 	cakeCart(e){
 		const src = e.target;
 		const name = $(src).parent().siblings(".username").html();
+		this.name = name;
 		$.post("/api/find",{name,level:0},(data)=>{
 			if(data.res_code ===1){
-				console.log(">>>",data.res_body);
 				if(data.res_body.data[0].cart.length===0){
 					var html = `<p>该用户购物车为空</p>`;
-					$(".carts-table").html(html);
+					$(".carts-table tbody").html(html);
 				}else{
 					var arr=data.res_body.data[0].cart;
-					console.log(arr);
 					var html="";
 					for(var key in arr){
 						html+=`<tr>
@@ -150,22 +255,72 @@ $.extend(Cake.prototype,{
 		const _id = $(src).parent().siblings(".id").html();
 		$.post("/api/cake/find",{_id},(data)=>{
 			if(data.res_code ===1){
-				console.log(">>>",data.res_body);
+				console.log(">>>",data.res_body,data.res_body.data[0].comment.length);
 				if(data.res_body.data[0].comment.length===0){
 					var html = `<p>该商品评论为空</p>`;
-					$(".comments-table").html(html);
+					$(".comments-table tbody").html(html);
 				}else{
 					var arr=data.res_body.data[0].comment;
 					console.log(arr);
 					var html="";
 					for(var key in arr){
 						html+=`<tr>
-						<td>${arr[key].id}</td>
+						<td class='id'>${_id}</td>
+						<td class='commentId'>${arr[key].id}</td>
 						<td>${arr[key].content}</td>
+						<td>
+							<a href="javascript:void(0);" title="" class="removeComment"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+						</td>
 						</tr>`;
 					}
 					$(".comments-table tbody").html(html);
 				}	
+			}
+		});
+	},
+	//删除评论
+	removeComment(e){
+		const src = e.target;
+		const _id = $(src).parent().parent().siblings(".id").html();
+		const commentId = $(src).parent().parent().siblings(".commentId").html();
+		$.post("/api/cake/find",{_id},(data)=>{
+			if(data.res_code ===1){
+				let arr = data.res_body.data[0].comment;
+				arr = arr.filter(function(item,index){
+					return item.id !== commentId;
+				})
+				const comment = JSON.stringify(arr)
+				$.post("/api/cake/update",{_id,comment:comment},(data)=>{
+					if(data.res_code ===1){
+						this.success('删除评论成功');
+						$.post("/api/cake/find",{_id},(data)=>{
+							if(data.res_code ===1){
+								console.log(">>>",data.res_body);
+								if(data.res_body.data[0].comment.length===0){
+									var html = `<p>该商品评论为空</p>`;
+									$(".comments-table tbody").html(html);
+								}else{
+									var arr=data.res_body.data[0].comment;
+									console.log(arr);
+									var html="";
+									for(var key in arr){
+										html+=`<tr>
+										<td class='id'>${_id}</td>
+										<td class='commentId'>${arr[key].id}</td>
+										<td>${arr[key].content}</td>
+										<td>
+											<a href="javascript:void(0);" title="" class="removeComment"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+										</td>
+										</tr>`;
+									}
+									$(".comments-table tbody").html(html);
+								}	
+							}
+						});
+					}else{
+						this.error('删除评论失败');
+					}
+				});
 			}
 		});
 	},
@@ -469,24 +624,28 @@ $.extend(Cake.prototype,{
 	//删除店铺
 	removeStoreHandler(e){
 		var _id=$(e).parent().parent().siblings(".id").html();
-		console.log(_id);
 		let url ="/api/store/delete";
-		// $.post(url,{_id},(data)=>{
-		// 	//console.log(data);
-		// 	if(data.res_code==1){
-		// 		this.loadByPage();
-		// 		this.loadPage();
-		// 		this.success('删除店铺成功');
-		// 	}else{
-		// 		this.error('删除店铺失败');
-		// 	}
+		$.post(url,{_id},(data)=>{
+			//console.log(data);
+			if(data.res_code==1){
+				this.loadByPage();
+				this.loadPage();
+				this.success('删除店铺成功');
+			}else{
+				this.error('删除店铺失败');
+			}
 			
-		// });
+		});
 	},
 	//获取当前点击商品id
 	nowId(){
 		var _id=$(this).parent().siblings(".id").html();
 		$(".update-cake-form #updateCakeId").val(_id);
+	},
+	//获取当前点击店铺id
+	nowStoreId(){
+		var _id=$(this).parent().siblings(".id").html();
+		$(".update-store-form #updateStoreId").val(_id);
 	},
 	//获取当前点击管理员用户名
 	nowManager(){
@@ -521,6 +680,31 @@ $.extend(Cake.prototype,{
 			}
 		});
 	},
+	//修改店铺
+	updateStoreHandler(){
+		let formData=new FormData($(".update-store-form")[0]);
+		let url ="/api/store/update";
+		var _this=this;
+		$.ajax({
+			type:"post",
+			url,
+			data:formData,
+			dataType:"json",
+			processData:false,
+			contentType:false,
+			success(data){
+				// 关闭模态框
+				if(data.res_code===1){
+					_this.loadPage();
+					_this.loadByPage();
+					_this.success('修改店铺成功');
+				}else{
+					_this.error('修改店铺失败');
+				}
+				$("#updateModalStore").modal("hide");
+			}
+		});
+	},
 	//分类查找商品
 	findCake(){
 		let value=$(".findCondition").val();
@@ -548,12 +732,51 @@ $.extend(Cake.prototype,{
 							<td>${curr.type}</td>
 							<td>${curr.price}</td>
 							<td>
+								<button type="button" class="btn btn-primary seecomment" data-toggle="modal" data-target="#cakeCommetModal">查看详情</button>
+							</td>
+							<td>
 								<a href="javascript:void(0);" title="" class="updateCake" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 								<a href="javascript:void(0);" title="" class="removeCake"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 							</td>
 						</tr>
 					`;
 					$(".cake-table tbody").html(html);
+					$(".paginationHide").addClass("hide");
+				});
+			}else{
+				this.error('没有查询的商品');
+			}
+		});
+	},
+	//分类查找店铺
+	findStore(){
+		let value=$(".findStoreCondition").val();
+		if(!$(".thistype").attr("what"))
+		{var key = "_id";
+			}else{
+				var key = $(".thistype").attr("what");
+			}
+		var obj={};
+		obj.info=value;
+		obj.type=key;
+		let url ="/api/store/find";
+		$.post(url,obj,(data)=>{
+			//获取查询后的数据渲染页面
+			if(data.res_body.data.length){
+				var html="";
+				data.res_body.data.forEach((curr,index)=>{
+					html+=`<tr>
+	 						<td class="id">${curr._id}</td>
+							<td>${curr.name}</td>
+							<td>${curr.address}</td>
+							<td>${curr.tel}</td>
+							<td>
+								<a href="javascript:void(0);" title="" class="updateStore" data-toggle="modal" data-target="#updateModalStore"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								<a href="javascript:void(0);" title="" class="removeStore"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					`;
+					$(".store-table tbody").html(html);
 					$(".paginationHide").addClass("hide");
 				});
 			}else{

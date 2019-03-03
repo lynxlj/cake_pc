@@ -15,7 +15,7 @@
 		<ul class="nav nav-pills nav-stacked" style="width: 200px;float: left;">
 		  <li role="presentation" class="tab active"><a class="cake-details" href="javascript:void(0);"><span class="glyphicon glyphicon-cake" aria-hidden="true"></span>&nbsp;&nbsp;商品详情</a></li>
 		  <li role="presentation" class="tab"><a class="userinfo" href="javascript:void(0);"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;个人信息</a></li>
-		  <li role="presentation" class="tab"><a class="cake-details" href="javascript:void(0);"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;借阅信息</a></li>
+		  <li role="presentation" class="tab"><a class="cake-details" href="javascript:void(0);"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;购物车信息</a></li>
 		  <li role="presentation" class="tab"><a class="change-password" href="javascript:void(0);"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;&nbsp;修改密码</a></li>
 		</ul>
 		<div  style="position: fixed;top:10%;left:40%;width: 20%;" class="alert alert-danger hidden update-error">修改失败</div>
@@ -48,12 +48,10 @@
 			  	<thead>
 					<tr>
 						<td>商品编号</td>
-						<td>封面</td>
+						<td>商品图片</td>
 						<td>商品名称</td>
 						<td>商品类型</td>
-						<td>数量</td>
-						<td>价格</td>
-						<td>出版社</td>
+						<td>商品价格</td>
 						<td>操作</td>
 					</tr>
 				</thead>
@@ -95,15 +93,16 @@
 
 		<div class="panel panel-primary box hidden" style="margin-left: 220px;min-height: 500px;">
 		  <div class="panel-heading">
-			  <h3 class="panel-title">借阅信息</h3>
+			  <h3 class="panel-title">购物车信息</h3>
 			</div>
 			<div class="panel-body">
 			  <table class="table table-striped table-borrowCake">
 			  	<thead>
 					<tr>
 						<td>商品编号</td>
-						<td>书名</td>
-						<td>借阅时间</td>
+						<td>商品名称</td>
+						<td>商品价格</td>
+						<td>商品数量</td>
 						<td>操作</td>
 					</tr>
 				</thead>

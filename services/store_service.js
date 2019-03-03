@@ -3,11 +3,12 @@ const StoreDao = require("../dao/store_dao.js");
 const StoreService = {
 	// 发布店铺信息
 	publish(req, res, next) {
-		console.log('publish',req.body)
+		console.log('publishStore',req.body)
 		// 获取请求中传递的数据
 		const {_id,name,address,tel,} = req.body;
 		// 保存到数据库中
-		StoreDao.save({_id,name,address,tel})
+		StoreDao.save({_id,name,address,tel
+		})
 							.then((data)=>{
 								console.log(data);
 								res.json({res_code: 1, res_error: "", res_body: {data}});
@@ -56,7 +57,7 @@ const StoreService = {
 		for(var key in obj){
 			if(!obj[key]) delete obj[key];
 		}
-		//console.log(obj);
+		console.log('updateStore',obj);
 		StoreDao.update({_id},obj)
 				.then((data)=>{
 					res.json({res_code:1,res_error:"",res_body:{data}});

@@ -20,6 +20,9 @@ const CakeDao={
 	},
 	//修改商品信息
 	update(condition,cakeInfo){
+		if(cakeInfo.comment){
+			cakeInfo.comment = JSON.parse(cakeInfo.comment);
+		}
 		return Cake.update(condition,cakeInfo);
 	},
 	//查找商品信息

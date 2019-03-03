@@ -18,13 +18,29 @@ const IdDao = {
 		}
 	},
 	update(condition,info,level){
+		if(info.cart){
+			info.cart = JSON.parse(info.cart);
+			if(info.cart.length===0){
+				return User.update(condition,{cart:[]});
+			}
+			else{
+				return User.update(condition,{cart:info.cart});
+			}
+			// const index = info.cake.length-1;
+			// if(!info.cake[index].borrow_time)
+			// info.cake[index].borrow_time = new Date();
+		}
 		if(info.cake){
 			info.cake = JSON.parse(info.cake);
-			if(info.cake.length===0)
-			return User.update(condition,{cake:[]});
-			const index = info.cake.length-1;
-			if(!info.cake[index].borrow_time)
-			info.cake[index].borrow_time = new Date();
+			if(info.cake.length===0){
+				return User.update(condition,{cake:[]});
+			}
+			else{
+				return User.update(condition,{cake:info.cake});
+			}
+			// const index = info.cake.length-1;
+			// if(!info.cake[index].borrow_time)
+			// info.cake[index].borrow_time = new Date();
 		}
 		if(level==0){//判断是否为普通用户更新
 			return User.update(condition,info);

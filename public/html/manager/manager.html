@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/libs/bootstrap/css/bootstrap.min.css">
-	<title>商品管理</title>
+	<title>廿一客蛋糕后台管理系统</title>
 </head>
 <body>
 <!--头部引用-->
@@ -78,9 +78,9 @@
 							</ul>
 						</div>
 						<div class="input-group col-lg-4" style="float: left;">
-								<input type="text" class="form-control findCondition" placeholder="输入搜索内容">
+								<input type="text" class="form-control findStoreCondition" placeholder="输入搜索内容">
 									<span class="input-group-btn">
-											<button class="btn btn-default find" type="button">搜索</button>
+											<button class="btn btn-default findStore" type="button">搜索</button>
 									</span>
 						</div>
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModalStore" style="float: right;">添加</button>
@@ -305,7 +305,7 @@
 	    </div>
 	  </div>
 	</div>
-	<!-- 修改商品的模态框 -->
+	<!-- 修改店铺的模态框 -->
 	<div class="modal fade" id="updateModalStore" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -315,7 +315,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="alert alert-danger hidden addpos-error">修改失败</div>
-					<form class="update-cake-form">
+					<form class="update-store-form">
 						<div class="form-group">
 					<label for="updateStoreId">店铺编码</label>
 					<input type="text" class="form-control" name="_id" id="updateStoreId" readonly="readonly">
@@ -336,7 +336,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary btn-update-cake">确认修改</button>
+					<button type="button" class="btn btn-primary btn-update-store">确认修改</button>
 				</div>
 			</div>
 		</div>
@@ -392,11 +392,13 @@
 		      <table class="table table-striped details-table">
 			    	<thead>
 							<tr>
-								<td>商品编号</td>
+								<td>用户名</td>
+								<td>订单编号</td>
 								<td>商品名</td>
 								<td>数量</td>
 								<td>下单时间</td>
 								<td>订单状态</td>
+								<td>操作</td>
 							</tr>
 						</thead>
 	 				<tbody></tbody>
@@ -415,8 +417,10 @@
 						<table class="table table-striped comments-table">
 							<thead>
 								<tr>
+									<td>商品编号</td>
 									<td>评论编号</td>
 									<td>商品内容</td>
+									<td>操作</td>
 								</tr>
 							</thead>
 						 <tbody></tbody>

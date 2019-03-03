@@ -66,13 +66,18 @@ const IdService = {
 			.catch((err)=>{
 				res.json({res_code: 0, res_error: err, res_body: {}});
 			});
+		}else if(req.body.cart){
+			var {name,cart,level} = req.body;
+			IdDao.update({name},{cart},level)
+			.then((data)=>{
+				res.json({res_code:1,res_error:"",res_body:{data:data}});
+			})
+			.catch((err)=>{
+				res.json({res_code: 0, res_error: err, res_body: {}});
+			});
 		}else if(req.body.cake){
+			console.log('qqq',req.body)
 			var {name,cake,level} = req.body;
-			//res.json({cake});
-			/*console.log(cake);
-			if(!cake){
-				cake="[]";
-			}*/
 			IdDao.update({name},{cake},level)
 			.then((data)=>{
 				res.json({res_code:1,res_error:"",res_body:{data:data}});
