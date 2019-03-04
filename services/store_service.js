@@ -3,7 +3,7 @@ const StoreDao = require("../dao/store_dao.js");
 const StoreService = {
 	// 发布店铺信息
 	publish(req, res, next) {
-		console.log('publishStore',req.body)
+		console.log('publishStore',req)
 		// 获取请求中传递的数据
 		const {_id,name,address,tel,} = req.body;
 		// 保存到数据库中

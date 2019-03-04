@@ -584,13 +584,34 @@ $.extend(Cake.prototype,{
 		let formData=new FormData($(".add-store-form")[0]);
 		let url ="/api/store/publish";
 		var _this=this;
-		$.ajax({
-			type:"post",
+		console.log('222name',formData.get("name"));
+		// $.ajax({
+		// 	type:"post",
+		// 	url,
+		// 	data:formData,
+		// 	dataType:"json",
+		// 	processData:false,
+		// 	contentType:false,
+		// 	success(data){
+		// 		// 关闭模态框
+		// 		$("#addModalStore").modal("hide");
+		// 		if(data.res_code===1){
+		// 			_this.loadByPage();
+		// 			_this.loadPage();
+		// 			_this.success('添加店铺成功');
+		// 		}else{
+		// 			_this.error('添加店铺失败');
+		// 		}
+		// 	}
+		// });
+		var data = {};
+		data._id = formData.get("_id");
+		data.name = formData.get("name");
+		data.address = formData.get("address");
+		data.tel = formData.get("tel");
+		$.post({
 			url,
-			data:formData,
-			dataType:"json",
-			processData:false,
-			contentType:false,
+			data,
 			success(data){
 				// 关闭模态框
 				$("#addModalStore").modal("hide");
@@ -685,18 +706,39 @@ $.extend(Cake.prototype,{
 		let formData=new FormData($(".update-store-form")[0]);
 		let url ="/api/store/update";
 		var _this=this;
-		$.ajax({
-			type:"post",
+		// $.ajax({
+		// 	type:"post",
+		// 	url,
+		// 	data:formData,
+		// 	dataType:"json",
+		// 	processData:false,
+		// 	contentType:false,
+		// 	success(data){
+		// 		// 关闭模态框
+		// 		if(data.res_code===1){
+		// 			_this.loadPage();
+		// 			_this.loadByPage();
+		// 			_this.success('修改店铺成功');
+		// 		}else{
+		// 			_this.error('修改店铺失败');
+		// 		}
+		// 		$("#updateModalStore").modal("hide");
+		// 	}
+		// });
+		var data = {};
+		data._id = formData.get("_id");
+		data.name = formData.get("name");
+		data.address = formData.get("address");
+		data.tel = formData.get("tel");
+		$.post({
 			url,
-			data:formData,
-			dataType:"json",
-			processData:false,
-			contentType:false,
+			data,
 			success(data){
 				// 关闭模态框
+				$("#addModalStore").modal("hide");
 				if(data.res_code===1){
-					_this.loadPage();
 					_this.loadByPage();
+					_this.loadPage();
 					_this.success('修改店铺成功');
 				}else{
 					_this.error('修改店铺失败');

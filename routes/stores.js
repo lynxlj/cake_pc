@@ -11,9 +11,9 @@ router.post("/publish",StoreService.publish);
 router.post("/findbypage",StoreService.findByPage);
 //查找总页数
 router.post("/findpage",StoreService.findPage);
-//删除职位
+//删除店铺
 router.post("/delete",StoreService.remove);
-//修改职位
+//修改店铺
 router.post("/update",StoreService.update);
 //按条件查找店铺
 router.post("/find",StoreService.find);

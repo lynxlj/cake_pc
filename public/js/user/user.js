@@ -91,7 +91,11 @@ $.extend(User.prototype,{
 		//修改密码
 		$(".password-btn").on("click",this.changePassword.bind(this));
 		//还书按钮
-		$(".table-borrowCake").on("click",".returnCake",this.returnCake.bind(this));
+		$(".table-handleCake").on("click",".returnCake",this.returnCake.bind(this));
+		//购物车增加数量
+		$(".table-handleCake").on("click",".addNum",this.addNumHandle.bind(this));
+		//购物车减少数量
+		$(".table-handleCake").on("click",".reduceNum",this.reduceNumHandle.bind(this));
 	},
 	returnCake(e){
 		const src = e.target,
@@ -166,14 +170,14 @@ $.extend(User.prototype,{
 				for(var index in cart){
 					html+=`<tr>
 								<td class="cakeId">${cart[index].id}</td>
-								<td>${cart[index].cakename}</td>
+								<td class="cakename">${cart[index].cakename}</td>
 								<td>${cart[index].cakeprice}</td>
-								<td>${cart[index].cakenum}</td>
-								<td><a class="returnCake" href="javascript:void">+</a></td>
-								<td><a class="returnCake" href="javascript:void">-</a></td>
+								<td class="cakenum">${cart[index].cakenum}</td>
+								<td><a class="addNum" href="javascript:void">+</a></td>
+								<td><a class="reduceNum" href="javascript:void">-</a></td>
 							</tr>`;
 				}
-				$('.table-borrowCake tbody').html(html);
+				$('.table-handleCake tbody').html(html);
 			}
 		});
 	},
@@ -244,7 +248,7 @@ $.extend(User.prototype,{
 						<td>${curr.type}</td>
 						<td class="cakeprice">${curr.price}</td>
 						<td>
-							<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>加入购物车</a>
+							<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>加入购物车</a>
 						</td>
 					</tr>
 				`;
@@ -382,13 +386,115 @@ $.extend(User.prototype,{
 						// 		_this.error("借阅商品失败");
 						// 	}
 						// });
+						_this.success('加入购物车成功');
 					}else{
-						_this.error("借阅商品失败");
+						_this.error("加入购物车失败");
 					}
 				});
 			}
 		});
-	}
+	},
+	//购物车数量+1
+	addNumHandle(e){
+		const src = e.target;
+		const _this = this;
+		var cakeId =$(src).parent().siblings(".cakeId").html();
+		var cakename =$(src).parent().siblings(".cakename").html();
+		var cakenum =$(src).parent().siblings(".cakenum").html();
+		//修改数据库购物车数量
+		const username = JSON.parse(sessionStorage.loginUser).name;
+		$.post("/api/find",{name:username,level:0},(data)=>{
+			if (data.res_code === 1) {
+				var cart = data.res_body.data[0].cart;
+				for(var index in cart){
+					if(cart[index].id === cakeId){
+						cart[index].cakenum = cart[index].cakenum+1;
+					}
+					
+				}
+				cart = JSON.stringify(cart);
+				$.post("/api/update",{name:username,cart:cart,level:0},(data)=>{
+					if(data.res_code===1){
+						_this.success('添加成功');
+						let newNum = Number(cakenum) +1;
+						$(src).parent().siblings(".cakenum").html(newNum);
+					}else{
+						_this.error("添加失败");
+					}
+				});
+			}
+		});
+	},
+	//购物车数量-1
+	reduceNumHandle(e){
+		const src = e.target;
+		const _this = this;
+		var cakeId =$(src).parent().siblings(".cakeId").html();
+		var cakename =$(src).parent().siblings(".cakename").html();
+		var cakenum =$(src).parent().siblings(".cakenum").html();
+		if(Number(cakenum) >1){
+			const username = JSON.parse(sessionStorage.loginUser).name;
+			//修改数据库购物车数量
+			$.post("/api/find",{name:username,level:0},(data)=>{
+				if (data.res_code === 1) {
+					var cart = data.res_body.data[0].cart;
+					for(var index in cart){
+						if(cart[index].id === cakeId){
+							cart[index].cakenum = cart[index].cakenum-1;
+						}
+						
+					}
+					cart = JSON.stringify(cart);
+					$.post("/api/update",{name:username,cart:cart,level:0},(data)=>{
+						if(data.res_code===1){
+							_this.success('减少成功');
+							let newNum = Number(cakenum) -1;
+							$(src).parent().siblings(".cakenum").html(newNum);
+						}else{
+							_this.error("减少失败");
+						}
+					});
+				}
+			});
+		}else if(Number(cakenum) == 1){
+			const username = JSON.parse(sessionStorage.loginUser).name;
+			//修改数据库购物车数量
+			$.post("/api/find",{name:username,level:0},(data)=>{
+				if (data.res_code === 1) {
+					var cart = data.res_body.data[0].cart;
+					cart = cart.filter(function(item){
+						return item.id !== cakeId;
+					});
+					cart = JSON.stringify(cart);
+					$.post("/api/update",{name:username,cart:cart,level:0},(data)=>{
+						if(data.res_code===1){
+							_this.success('减少成功');
+							$.post("/api/find",{name:username,level:0},(data)=>{
+								if(data.res_code === 1){
+									//console.log('cart',data.res_body.data[0].cart)
+									const cart = data.res_body.data[0].cart;
+									let html = '';
+									for(var index in cart){
+										html+=`<tr>
+													<td class="cakeId">${cart[index].id}</td>
+													<td class="cakename">${cart[index].cakename}</td>
+													<td>${cart[index].cakeprice}</td>
+													<td class="cakenum">${cart[index].cakenum}</td>
+													<td><a class="addNum" href="javascript:void">+</a></td>
+													<td><a class="reduceNum" href="javascript:void">-</a></td>
+												</tr>`;
+									}
+									$('.table-handleCake tbody').html(html);
+								}
+							});
+						}else{
+							_this.error("减少失败");
+						}
+					});
+				}
+			});
+		}
+	},
 });
 
 new User;
