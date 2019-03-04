@@ -11,8 +11,9 @@ body{
 .login{
 	position: relative;
 	width: 26%;
-	margin: 0 auto;
-	margin-top: 20.5%;
+	/* margin: 0 auto; */
+	margin-top: 18.5%;
+	margin-left: 60%;
 }
 .login form{
 	width: 80%;
@@ -46,4 +47,16 @@ position: absolute;
 top:-14%;
 left: 53%;
 color:white;
+}
+.login-form{
+	margin-left: 300px;
+	padding: 15px;
+	background: #fff;
+}
+.caketitle{
+	position: fixed;
+	top: 10%;
+	font-size: 48px;
+	color: #684029;
+	margin-left: 40%;
 }
