@@ -42,6 +42,13 @@ const IdDao = {
 			// if(!info.cake[index].borrow_time)
 			// info.cake[index].borrow_time = new Date();
 		}
+		if(info.true_name){
+			if(level==0){
+				return User.update(condition,{password:info.password});
+			}else{
+				return Manager.update(condition,{password:info.password});
+			}
+		}
 		if(level==0){//判断是否为普通用户更新
 			return User.update(condition,info);
 		}else{//管理员账号注册

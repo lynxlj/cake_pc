@@ -245,7 +245,7 @@ $.extend(User.prototype,{
  						<td class="id">${curr._id}</td>
 						<td><img src="${curr.cover}" with="60"  height="60"}></td>
 						<td class="cakename">${curr.name}</td>
-						<td>${curr.type}</td>
+						<td class="caketype">${curr.type}</td>
 						<td class="cakeprice">${curr.price}</td>
 						<td>
 							<a href="javascript:void(0);" title="" class="borrow"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>加入购物车</a>
@@ -335,6 +335,7 @@ $.extend(User.prototype,{
 		const _this = this;
 		var cakename=$(src).parent().siblings(".cakename").html();
 		var cakeprice=$(src).parent().siblings(".cakeprice").html();
+		var caketype=$(src).parent().siblings(".caketype").html();
 		//获取当前商品数量
 		//var number=$(src).parent().siblings(".number").html();
 		//console.log(number);
@@ -366,6 +367,7 @@ $.extend(User.prototype,{
 						id:_id,
 						cakename:cakename,
 						cakeprice:cakeprice,
+						caketype:caketype,
 						cakenum:1
 					});
 				}

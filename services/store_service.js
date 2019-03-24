@@ -28,6 +28,16 @@ const StoreService = {
 						res.json({res_code:1,res_error:err,res_body:{}});
 					});
 	},
+	//查找所有店铺
+	findAll(req,res,next){
+		StoreDao.findAll()
+					.then((data)=>{
+						res.json({res_code:1,res_error:"",res_body:{data}});
+					})
+					.catch((err)=>{
+						res.json({res_code:1,res_error:err,res_body:{}});
+					});
+	},
 	//查找页数
 	findPage(req,res,next){
 		StoreDao.findPage()

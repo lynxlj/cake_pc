@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
 	age:Number,
 	cake:Array,
 	cart:Array,
-	reg_time:Date
+	reg_time:Date,
+	true_name:String
 });
 
 const managerSchema = new mongoose.Schema({
@@ -19,7 +20,8 @@ const managerSchema = new mongoose.Schema({
 	tel:Number,
 	sex:String,
 	age:Number,
-	reg_time:Date
+	reg_time:Date,
+	true_name:String
 });
 
 const cakeSchema = new mongoose.Schema({
@@ -29,6 +31,7 @@ const cakeSchema = new mongoose.Schema({
 	price:Number,
 	cover:String,
 	comment:Array,
+	store:String,
 });
 
 const storeSchema = new mongoose.Schema({

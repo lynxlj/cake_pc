@@ -51,6 +51,7 @@
 							<td>商品名称</td>
 							<td>商品类型</td>
 							<td>商品价格</td>
+							<td>商品所属店铺</td>
 							<td>商品评论</td>
 							<td>操作</td>
 						</tr>
@@ -219,7 +220,13 @@
 			  <div class="form-group">
 			    <label for="addCakePrice">商品价格</label>
 			    <input type="text" class="form-control" name="price" id="addCakePrice" placeholder="请输入商品价格">
-			  </div>
+				</div>
+				<div class="form-group">
+					<label for="store">请选择该商品所属店铺</label>
+					<select class="form-control" name="store" id="store">
+							
+					</select>	
+				</div>
 			</form>
 	      </div>
 	      <div class="modal-footer">
@@ -281,7 +288,7 @@
 			    <input type="text" class="form-control" name="_id" id="updateCakeId" readonly="readonly">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateCakeCover">商品封图片/label>
+			    <label for="updateCakeCover">商品封图片</label>
 			    <input type="file" class="form-control" name="cover" id="updateCakeCover">
 			  </div>
 			  <div class="form-group">
@@ -295,7 +302,13 @@
 			  <div class="form-group">
 			    <label for="updateCakePrice">商品价格</label>
 			    <input type="text" class="form-control" name="price" id="updateCakePrice" placeholder="请输入商品价格">
-			  </div>
+				</div>
+				<div class="form-group">
+					<label for="store">请选择该商品所属店铺</label>
+					<select class="form-control" name="store" id="updateStore">
+							
+					</select>	
+				</div>
 			</form>
 	      </div>
 	      <div class="modal-footer">
@@ -353,26 +366,30 @@
 	      	<div class="alert alert-danger hidden addmanager-error">添加失败</div>
 	        <form class="add-manager-form">
 	        	<div class="form-group">
-			    <label >管理账号</label>
-			    <input type="text" class="form-control" name="name" placeholder="请输入账号名">
-			  </div>
-			  <div class="form-group">
-			    <label >密码</label>
-			    <input type="password" class="form-control" name="password" placeholder="请输入密码">
-			  </div>
-			  <div class="form-group">
-			    <label>性别</label>
-			    <input type="text" class="form-control" name="sex" placeholder="请输入性别">
-			  </div>
-			  <div class="form-group">
-			    <label>年龄</label>
-			    <input type="text" class="form-control" name="age" placeholder="请输入年龄">
-			  </div>
-			  <div class="form-group">
-			    <label>电话</label>
-			    <input type="text" class="form-control" name="tel" placeholder="请输入电话">
-			  </div>
-			</form>
+							<label >管理账号</label>
+							<input type="text" class="form-control" name="name" placeholder="请输入账号名">
+						</div>
+						<div class="form-group">
+								<label >真实姓名(方便找回密码)</label>
+								<input type="text" class="form-control" name="true_name" placeholder="请输入真实姓名">
+							</div>
+						<div class="form-group">
+							<label >密码</label>
+							<input type="password" class="form-control" name="password" placeholder="请输入密码">
+						</div>
+						<div class="form-group">
+							<label>性别</label>
+							<input type="text" class="form-control" name="sex" placeholder="请输入性别">
+						</div>
+						<div class="form-group">
+							<label>年龄</label>
+							<input type="text" class="form-control" name="age" placeholder="请输入年龄">
+						</div>
+						<div class="form-group">
+							<label>电话</label>
+							<input type="text" class="form-control" name="tel" placeholder="请输入电话">
+						</div>
+					</form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -384,7 +401,7 @@
 	<!-- 用户订单的模态框 -->
 	<div class="modal fade" id="userdetailModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
+	    <div class="modal-content" style="width:925px;margin-left:-150px">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
 	        <h4 class="modal-title">用户订单详情</h4>
@@ -392,11 +409,13 @@
 		      <table class="table table-striped details-table">
 			    	<thead>
 							<tr>
-								<td>用户名</td>
+								<td style='display:none'>用户名</td>
 								<td>订单编号</td>
 								<td>商品名</td>
+								<td>商品价格</td>
 								<td>数量</td>
 								<td>下单时间</td>
+								<td>总金额</td>
 								<td>订单状态</td>
 								<td>操作</td>
 							</tr>

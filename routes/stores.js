@@ -17,6 +17,8 @@ router.post("/delete",StoreService.remove);
 router.post("/update",StoreService.update);
 //按条件查找店铺
 router.post("/find",StoreService.find);
+//查找所有店铺
+router.post("/findAll",StoreService.findAll);
 
 
 module.exports = router;

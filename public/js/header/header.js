@@ -15,7 +15,7 @@ Header.template=`<nav class="navbar navbar-inverse" style="margin-bottom:10px !i
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <img src="/images/header.png" width="50" style="float:left">
+	      <img src="/images/header.png" width="50" style="float:left;margin-top:6px;">
 	      <a class="navbar-brand" href="#" style="margin-left:5px;">廿一客蛋糕后台管理系统</a>
 	    </div>
 

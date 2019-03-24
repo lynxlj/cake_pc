@@ -10,6 +10,10 @@ const StoreDao={
 		const pageSize=3;
 		return Store.find().limit(pageSize).skip((page-1)*pageSize);
 	},
+	//查找所以店铺
+	findAll(page){
+		return Store.find();
+	},
 	//查找总数目
 	findPage(){
 		return Store.find().count();

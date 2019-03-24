@@ -8,6 +8,7 @@ $.extend(Cake.prototype,{
 		$(".position-page").addClass("active").siblings().removeClass("active");
 		this.loadByPage(1);
 		this.loadPage();
+		this.handleGetAllStore();
 	},
 	addListener(){
 		//点击翻页处理
@@ -71,6 +72,22 @@ $.extend(Cake.prototype,{
 		//修改密码按钮
 		$(".password-btn").on("click",this.changePassword.bind(this));
 	},
+	//获取所有店铺
+	handleGetAllStore(){
+		$.post("/api/store/findAll",(data)=>{
+			console.log('store',data);
+			if(data.res_code == 1) {
+				var html="";
+				data.res_body.data.forEach((curr,index)=>{
+					html+=`<option>${curr.name}</option>`;
+				});
+				console.log('html',html)
+				$("#store").html(html);
+				$("#updateStore").html(html);
+			}
+		});
+		
+	},
 	success(text){
 		$(".update-success").html(text);
 		$(".update-success").removeClass("hidden");
@@ -107,28 +124,41 @@ $.extend(Cake.prototype,{
 		const orderId = $(src).parent().siblings(".id").html();
 		let state = $(src).parent().siblings(".state").html();
 		if(state == '已完成'){
+			alert('该订单已完成');
 			return;
 		}
-		state = '已完成';
-		$(src).parent().siblings(".state").html('已完成')
-		console.log('change',state);
+		if(state == '配送中'){
+			alert('该订单已发货，正在配送中...');
+			return;
+		}
+		state = '配送中';
 		$.post("/api/find",{name,level:0},(data)=>{
 			console.log(data)
 			if(data.res_code ===1){
 				console.log('订单',data.res_body.data[0].cake);
 				var arr=data.res_body.data[0].cake;
 				for(var i=0;i<arr.length;i++){
-					if(arr[i].id == orderId){
-						arr[i].state = state;
+					if(arr[i].length >1 ){
+						for(let a = 0; a<arr[i].length;a++){
+							if(arr[i][a].order_id == orderId){
+								arr[i][a].state = state;
+							}
+						}
+					}else{
+						if(arr[i][0].order_id == orderId){
+							arr[i][0].state = state;
+						}
 					}
+					
 				}
 				cake = JSON.stringify(arr);
 				$.post("/api/update",{name:name,cake:cake,level:0},(data)=>{
 					console.log('修改订单状态',data);
 					if(data.res_code === 1){
 						this.success('修改状态成功');
+						$(src).parent().siblings(".state").html('配送中')
 					}else{
-						this.error('删除状态失败');
+						this.error('修改状态失败');
 					}
 				});
 
@@ -163,17 +193,15 @@ $.extend(Cake.prototype,{
 									var html="";
 									for(var key in arr){
 										html+=`<tr>
-										<td class='username'>${name}</td>
-										<td class='id'>${arr[key].id}</td>
+										<td class='username' style='display:none'>${name}</td>
+										<td class='id'>${arr[key].order_id}</td>
 										<td>${arr[key].cakename}</td>
 										<td>${arr[key].cakenum}</td>
 										<td>${arr[key].order_time}</td>
+										<td>${arr[i][0].totalPrice}</td>
 										<td class='state'>${arr[key].state}</td>
 										<td>
-											<a href="javascript:void(0);" title="" class="changeState">修改订单状态</a>
-										</td>
-										<td>
-											<a href="javascript:void(0);" title="" class="removeOrder">删除订单</a>
+											<a href="javascript:void(0);" title="" class="changeState">确定发货</a>
 										</td>
 										</tr>`;
 									}
@@ -201,23 +229,75 @@ $.extend(Cake.prototype,{
 					$(".details-table tbody").html(html);
 				}else{
 					var arr=data.res_body.data[0].cake;
+					console.log('order',arr)
 					var html="";
-					for(var key in arr){
-						html+=`<tr>
-						<td class='username'>${name}</td>
-						<td class='id'>${arr[key].id}</td>
-						<td>${arr[key].cakename}</td>
-						<td>${arr[key].cakenum}</td>
-						<td>${arr[key].order_time}</td>
-						<td class='state'>${arr[key].state}</td>
-						<td>
-							<a href="javascript:void(0);" title="" class="changeState">修改订单状态</a>
-						</td>
-						<td>
-							<a href="javascript:void(0);" title="" class="removeOrder">删除订单</a>
-						</td>
-						</tr>`;
+					for(let i = 0; i<arr.length; i++){
+						if(arr[i].length >1){
+							for(let j = 0; j < arr[i].length ; j++){
+								if( j === 0 ){
+									html+=`<tr>
+										<td class='username' style='display:none'>${name}</td>
+										<td class='id'>${arr[i][0].order_id}</td>
+										<td>${arr[i][0].cakename}</td>
+										<td>${arr[i][0].cakeprice}</td>
+										<td>${arr[i][0].cakenum}</td>
+										<td>${arr[i][0].order_time}</td>
+										<td>${arr[i][0].totalPrice}</td>
+										<td class='state'>${arr[i][0].state}</td>
+										<td>
+											<a href="javascript:void(0);" title="" class="changeState">确定发货</a>
+										</td>
+										</tr>`;
+								}else{
+									html+=`<tr>
+										<td class='username' style='display:none'></td>
+										<td class='id'></td>
+										<td>${arr[i][j].cakename}</td>
+										<td>${arr[i][j].cakeprice}</td>
+										<td>${arr[i][j].cakenum}</td>
+										<td>${arr[i][j].order_time}</td>
+										<td>${arr[i][0].totalPrice}</td>
+										<td class='state'></td>
+										<td>
+										</td>
+										</tr>`;
+								}
+							}
+						}else{
+							for(var key in arr[i]){
+								html+=`<tr>
+								<td class='username' style='display:none'>${name}</td>
+								<td class='id'>${arr[i][key].order_id}</td>
+								<td>${arr[i][key].cakename}</td>
+								<td>${arr[i][key].cakeprice}</td>
+								<td>${arr[i][key].cakenum}</td>
+								<td>${arr[i][key].order_time}</td>
+								<td>${arr[i][0].totalPrice}</td>
+								<td class='state'>${arr[i][key].state}</td>
+								<td>
+									<a href="javascript:void(0);" title="" class="changeState">确定发货</a>
+								</td>
+								</tr>`;
+							}
+						}
 					}
+					// for(var key in arr){
+					// 	html+=`<tr>
+					// 	<td class='username'>${name}</td>
+					// 	<td class='id'>${arr[key].id}</td>
+					// 	<td>${arr[key].cakename}</td>
+					// 	<td>${arr[key].cakeprice}</td>
+					// 	<td>${arr[key].cakenum}</td>
+					// 	<td>${arr[key].order_time}</td>
+					// 	<td class='state'>${arr[key].state}</td>
+					// 	<td>
+					// 		<a href="javascript:void(0);" title="" class="changeState">修改订单状态</a>
+					// 	</td>
+					// 	<td>
+					// 		<a href="javascript:void(0);" title="" class="removeOrder">删除订单</a>
+					// 	</td>
+					// 	</tr>`;
+					// }
 					$(".details-table tbody").html(html);
 				}	
 			}
@@ -444,6 +524,7 @@ $.extend(Cake.prototype,{
 							<td>${curr.name}</td>
 							<td>${curr.type}</td>
 							<td>${curr.price}</td>
+							<td>${curr.store}</td>
 							<td>
 								<button type="button" class="btn btn-primary seecomment" data-toggle="modal" data-target="#cakeCommetModal">查看详情</button>
 							</td>
@@ -758,8 +839,6 @@ $.extend(Cake.prototype,{
 		var obj={};
 		obj.info=value;
 		obj.type=key;
-		
-		//console.log(obj);
 		let url ="/api/cake/find";
 		$.post(url,obj,(data)=>{
 			//console.log(data);
@@ -773,6 +852,7 @@ $.extend(Cake.prototype,{
 							<td>${curr.name}</td>
 							<td>${curr.type}</td>
 							<td>${curr.price}</td>
+							<td>${curr.store}</td>
 							<td>
 								<button type="button" class="btn btn-primary seecomment" data-toggle="modal" data-target="#cakeCommetModal">查看详情</button>
 							</td>

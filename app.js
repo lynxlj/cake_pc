@@ -12,6 +12,12 @@ var cakesRouter = require('./routes/cakes');
 var storesRouter = require('./routes/stores');
 
 var app = express();
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,username');
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

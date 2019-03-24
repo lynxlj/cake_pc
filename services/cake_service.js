@@ -3,11 +3,14 @@ const CakeDao = require("../dao/cake_dao.js");
 const CakeService = {
 	// 发布商品信息
 	publish(req, res, next) {
-		// 获取请求中传递的职位数据
-		const {_id,name,type,price,comment} = req.body;
+		// 获取请求中传递的数据
+		console.log("蛋糕",req.body)
+		const {_id,name,type,price,comment,store} = req.body;
 		let cover = "/images/upload/" + req.file.filename; // 获取上传文件Cover路径
+		console.log('>>>',{_id,name,type,price,comment,cover,store})
+		//return;
 		// 保存到数据库中
-		CakeDao.save({_id,name,type,price,comment,cover})
+		CakeDao.save({_id,name,type,price,comment,cover,store})
 							.then((data)=>{
 								console.log(data);
 								res.json({res_code: 1, res_error: "", res_body: {data}});
@@ -52,8 +55,8 @@ const CakeService = {
 	//修改商品信息
 	update(req,res,next){
 		console.log('1122',req.body)
-		const {_id,name,type,price,comment} = req.body;
-		var obj={_id,name,type,price,comment};
+		const {_id,name,type,price,comment,store} = req.body;
+		var obj={_id,name,type,price,comment,store};
 		for(var key in obj){
 			if(!obj[key]) delete obj[key];
 		}
