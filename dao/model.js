@@ -41,12 +41,18 @@ const storeSchema = new mongoose.Schema({
 	tel:Number,
 });
 
+const typeSchema = new mongoose.Schema({
+	_id:String,
+	name:String,
+});
+
 
 const User = mongoose.model('user',userSchema);
 const Manager = mongoose.model('manager',managerSchema);
 const Cake = mongoose.model('cake',cakeSchema);
 const Store = mongoose.model('store',storeSchema);
+const Type = mongoose.model('type',typeSchema);
 
 //导出模型
 
-module.exports = {User,Manager,Cake,Store};
+module.exports = {User,Manager,Cake,Store,Type};

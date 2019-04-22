@@ -15,6 +15,7 @@ router.post('/login',IdService.login);
 router.post('/update',IdService.update);
 //查找用户
 router.post('/find',IdService.find);
+router.post('/findAll',IdService.findAll);
 //注销
 router.get('/logout',IdService.logout);
 module.exports = router;

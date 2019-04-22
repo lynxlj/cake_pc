@@ -118,10 +118,9 @@ const IdService = {
 			}); 
 		}else{
 			var {name,level} = req.body;
-			/*if(name){
+			if(!name){
 				var name = "kry";
-				res.json({name});
-			}*/
+			}
 			IdDao.find({name},level)
 			.then((data)=>{
 				res.json({res_code:1,res_error:"",res_body:{data:data}});
@@ -134,7 +133,17 @@ const IdService = {
 	logout(req,res,next){
 		//req.session.loginUser = null;
 		res.json({res_code:1});
-	}
+	},
+	findAll(req,res,next){
+		console.log('lynx')
+		IdDao.findAll()
+					.then((data)=>{
+						res.json({res_code:1,res_error:"",res_body:{data}});
+					})
+					.catch((err)=>{
+						res.json({res_code:1,res_error:err,res_body:{}});
+					});
+	},
 }
 
 

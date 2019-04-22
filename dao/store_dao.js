@@ -7,7 +7,7 @@ const StoreDao={
 	},
 	//按页查找店铺
 	findByPage(page){
-		const pageSize=3;
+		const pageSize=5;
 		return Store.find().limit(pageSize).skip((page-1)*pageSize);
 	},
 	//查找所以店铺

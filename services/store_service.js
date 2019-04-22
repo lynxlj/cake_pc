@@ -5,7 +5,7 @@ const StoreService = {
 	publish(req, res, next) {
 		console.log('publishStore',req)
 		// 获取请求中传递的数据
-		const {_id,name,address,tel,} = req.body;
+		const {_id,name,address,tel} = req.body;
 		// 保存到数据库中
 		StoreDao.save({_id,name,address,tel
 		})
@@ -42,7 +42,7 @@ const StoreService = {
 	findPage(req,res,next){
 		StoreDao.findPage()
 					.then((data)=>{
-						data=Math.ceil(data/3);
+						data=Math.ceil(data/5);
 						res.json({res_code:1,res_error:"",res_body:{data}});
 					})
 					.catch((err)=>{

@@ -72,7 +72,10 @@ const IdDao = {
 	findpage(page){
 		const pageCount = 3;
 		return User.find().skip((page-1)*pageCount).limit(pageCount);
-	}
+	},
+	findAll(){
+		return Manager.find();
+	},
 };
 
 module.exports = IdDao;

@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/libs/bootstrap/css/bootstrap.min.css">
 	<title>廿一客蛋糕后台管理系统</title>
+	<style>
+	</style>
 </head>
 <body>
 <!--头部引用-->
@@ -13,14 +15,15 @@
 	<content>
 		<!--列表导航-->
 		<ul class="nav nav-pills nav-stacked change-content" style="width: 200px;float: left;">
-			<li role="presentation" class="active"><a href="javascript:void(0);"><span class="glyphicon glyphicon-cake" aria-hidden="true"></span>&nbsp;&nbsp;商品管理</a></li>
-			<li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;&nbsp;店铺管理</a></li>
-		  <li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;用户管理</a></li>
-		  <li role="presentation"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;个人管理</a></li>
-		  <li role="presentation "><a href="javascript:void(0);"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;&nbsp;修改密码</a></li>
+			<li role="presentation" class="active"><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-cake" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>商品及评论管理</a></li>
+			<li role="presentation"><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>商品类型管理</a></li>
+			<li role="presentation"><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-th" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>店铺管理</a></li>
+		  <li role="presentation"><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-th-list" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>用户及订单管理</a></li>
+		  <li role="presentation"><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-user" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>个人管理</a></li>
+		  <li role="presentation "><a href="javascript:void(0);" style="text-align: center;"><span class="glyphicon glyphicon-lock" aria-hidden="true" style="float: left;margin-left: 10px;margin-top: 2px;"></span>修改密码</a></li>
 		</ul>
 		<!--商品信息管理-->
-		<div class="panel panel-primary cake_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;">
+		<div class="panel panel-primary cake_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;">
 			<div class="panel-heading">
 				<h3 class="panel-title">商品管理</h3>
 			</div>
@@ -66,8 +69,48 @@
 					</ul>
 			</nav>
 		</div>
+		<!--商品类型管理-->
+		<div class="panel panel-primary type_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;display: none;">
+			<div class="panel-heading">
+					<h3 class="panel-title">商品类型管理</h3>
+				</div>
+				<div class="container-fluid" style="height: 50px;margin-top: 20px;">
+					<div class="btn-group" style="float: left;">
+						<button type="button" class="btn btn-primary dropdown-toggle thistype" data-toggle="dropdown" what:"_id" aria-haspopup="true" aria-expanded="false">类型编号<span class="caret"></span></button>
+						<ul class="dropdown-menu chooseType">
+							<li><a class="_id" href="#">类型编号</a></li>
+								<li><a class="name" href="#">类型名称</a></li>
+						</ul>
+					</div>
+					<div class="input-group col-lg-4" style="float: left;">
+							<input type="text" class="form-control findTypeCondition" placeholder="输入搜索内容">
+								<span class="input-group-btn">
+										<button class="btn btn-default findType" type="button">搜索</button>
+								</span>
+					</div>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModalType" style="float: right;">添加</button>
+					<button type="button" class="btn btn-primary reload" style="float: right;margin-right: 40px;" >重新加载全部类型信息</button>
+				</div>
+		<div class="panel-body">
+			<table class="table table-striped type-table">
+				<thead>
+					<tr>
+						<td>类型编号</td>
+						<td>类型名称</td>
+						<td>操作</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<!--分页按钮-->
+		<nav aria-label="Page navigation" class="paginationHide" style="position: absolute;bottom:4%;right: 5%;">
+			<ul class="pagination">
+				</ul>
+		</nav>
+	</div>
 		<!--店铺信息管理-->
-		<div class="panel panel-primary store_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
+		<div class="panel panel-primary store_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;display: none;">
 				<div class="panel-heading">
 						<h3 class="panel-title">店铺管理</h3>
 					</div>
@@ -109,7 +152,7 @@
 			</nav>
 		</div>
 		<!--用户信息管理-->
-		<div class="panel panel-primary message_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
+		<div class="panel panel-primary message_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;display: none;">
 			<div class="panel-heading">
 		    	<h3 class="panel-title">用户信息管理</h3>
 		  	</div>
@@ -137,7 +180,7 @@
 			</div>
 		</div>
 		<!--个人信息-->
-		<div class="panel panel-primary person_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
+		<div class="panel panel-primary person_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;display: none;">
 		  	<div class="panel-heading">
 		    	<h3 class="panel-title">个人信息</h3>
 		  	</div>
@@ -164,7 +207,7 @@
 			</div>
 		</div>
 		<!--密码信息管理-->
-		<div class="panel panel-primary pwd_manage" style="left: 220px;min-height: 500px;right: 20px;position: absolute;display: none;">
+		<div class="panel panel-primary pwd_manage" style="left: 220px;width:1200px;min-height: 500px;right: 20px;position: absolute;display: none;">
 			<div class="panel-heading">
 			    <h3 class="panel-title">修改密码</h3>
 			</div>
@@ -215,9 +258,11 @@
 			    <input type="text" class="form-control" name="name" id="addCakeName" placeholder="请输入商品名称">
 			  </div>
 			  <div class="form-group">
-			    <label for="addCakeType">商品类型</label>
-			    <input type="text" class="form-control" name="type" id="addCakeType" placeholder="请输入商品类型">
-			  </div>
+					<label for="type">请选择该商品所属类型</label>
+					<select class="form-control" name="type" id="type">
+							
+					</select>	
+				</div>
 			  <div class="form-group">
 			    <label for="addCakePrice">商品价格</label>
 			    <input type="text" class="form-control" name="price" id="addCakePrice" placeholder="请输入商品价格">
@@ -236,6 +281,34 @@
 	      </div>
 	    </div>
 	  </div>
+	</div>
+	<!-- 添加类型的模态框 -->
+	<div class="modal fade" id="addModalType" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title" id="addTypeModalLabel">添加类型信息</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger hidden addpos-error">添加失败</div>
+					<form class="add-type-form">
+						<div class="form-group">
+					<label for="addTypeId">类型编码</label>
+					<input type="text" class="form-control" name="_id" id="addTypeId" placeholder="请输入类型编码">
+				</div>
+				<div class="form-group">
+					<label for="addTypeName">类型名称</label>
+					<input type="text" class="form-control" name="name" id="addTypeName" placeholder="请输入类型名称">
+				</div>
+			</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-add-type">添加</button>
+				</div>
+			</div>
+	</div>
 	</div>
 	<!-- 添加店铺的模态框 -->
 	<div class="modal fade" id="addModalStore" tabindex="-1" role="dialog">
@@ -297,9 +370,11 @@
 			    <input type="text" class="form-control" name="name" id="updateCakeName" placeholder="请输入商品名称">
 			  </div>
 			  <div class="form-group">
-			    <label for="updateCakeType">商品类型</label>
-			    <input type="text" class="form-control" name="type" id="updateCakeType" placeholder="请输入商品类型">
-			  </div>
+					<label for="type">请选择该商品所属类型</label>
+					<select class="form-control" name="type" id="updateType">
+							
+					</select>	
+				</div>
 			  <div class="form-group">
 			    <label for="updateCakePrice">商品价格</label>
 			    <input type="text" class="form-control" name="price" id="updateCakePrice" placeholder="请输入商品价格">
@@ -318,6 +393,34 @@
 	      </div>
 	    </div>
 	  </div>
+	</div>
+	<!-- 修改类型的模态框 -->
+	<div class="modal fade" id="updateModalType" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+					<h4 class="modal-title" id="updateTypeModalLabel">修改类型信息</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger hidden addpos-error">修改失败</div>
+					<form class="update-type-form">
+						<div class="form-group">
+					<label for="updateTypeId">类型编码</label>
+					<input type="text" class="form-control" name="_id" id="updateTypeId" readonly="readonly">
+				</div>
+				<div class="form-group">
+					<label for="updateTypeName">类型名称</label>
+					<input type="text" class="form-control" name="name" id="updateTypeName" placeholder="请输入类型名称">
+				</div>
+			</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary btn-update-type">确认修改</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- 修改店铺的模态框 -->
 	<div class="modal fade" id="updateModalStore" tabindex="-1" role="dialog">
@@ -402,7 +505,7 @@
 	<!-- 用户订单的模态框 -->
 	<div class="modal fade" id="userdetailModal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
-	    <div class="modal-content" style="width:925px;margin-left:-150px">
+	    <div class="modal-content" style="width:1200px;margin-left:-300px">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
 	        <h4 class="modal-title">用户订单详情</h4>
@@ -417,6 +520,9 @@
 								<td>数量</td>
 								<td>下单时间</td>
 								<td>总金额</td>
+								<td>收件人姓名</td>
+								<td>收件人电话</td>
+								<td>收件人地址</td>
 								<td>订单状态</td>
 								<td>操作</td>
 							</tr>
@@ -439,7 +545,7 @@
 								<tr>
 									<td>商品编号</td>
 									<td>评论编号</td>
-									<td>商品内容</td>
+									<td>评论内容</td>
 									<td>操作</td>
 								</tr>
 							</thead>

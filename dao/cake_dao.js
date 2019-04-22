@@ -29,7 +29,11 @@ const CakeDao={
 	find(condition){
 		return Cake.find(condition);
 		//return condition;
-	}
+	},
+	//查找所有
+	findAll(){
+		return Cake.find();
+	},
 }
 
 module.exports=CakeDao;

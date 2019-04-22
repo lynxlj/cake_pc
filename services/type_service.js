@@ -1,16 +1,13 @@
-const CakeDao = require("../dao/cake_dao.js");
+const TypeDao = require("../dao/type_dao.js");
 
-const CakeService = {
-	// 发布商品信息
+const TypeService = {
+	// 发布店铺信息
 	publish(req, res, next) {
+		console.log('publishType',req)
 		// 获取请求中传递的数据
-		console.log("蛋糕",req.body)
-		const {_id,name,type,price,comment,store,store_name,type_name} = req.body;
-		let cover = "/images/upload/" + req.file.filename; // 获取上传文件Cover路径
-		console.log('>>>',{_id,name,type,price,comment,cover,store,store_name,type_name})
-		//return;
+		const {_id,name} = req.body;
 		// 保存到数据库中
-		CakeDao.save({_id,name,type,price,comment,cover,store,store_name,type_name})
+		TypeDao.save({_id,name})
 							.then((data)=>{
 								console.log(data);
 								res.json({res_code: 1, res_error: "", res_body: {data}});
@@ -19,10 +16,20 @@ const CakeService = {
 								res.json({res_code: 0, res_error: err, res_body: {}});
 							});
 	},
-	//按页查找商品
+	//按页查找店铺
 	findByPage(req,res,next){
 		const {page}=req.body;
-		CakeDao.findByPage(page)
+		TypeDao.findByPage(page)
+					.then((data)=>{
+						res.json({res_code:1,res_error:"",res_body:{data}});
+					})
+					.catch((err)=>{
+						res.json({res_code:1,res_error:err,res_body:{}});
+					});
+	},
+	//查找所有店铺
+	findAll(req,res,next){
+		TypeDao.findAll()
 					.then((data)=>{
 						res.json({res_code:1,res_error:"",res_body:{data}});
 					})
@@ -32,19 +39,19 @@ const CakeService = {
 	},
 	//查找页数
 	findPage(req,res,next){
-		CakeDao.findPage()
+		TypeDao.findPage()
 					.then((data)=>{
-						data=Math.ceil(data/3);
+						data=Math.ceil(data/5);
 						res.json({res_code:1,res_error:"",res_body:{data}});
 					})
 					.catch((err)=>{
 						res.json({res_code:1,res_error:err,res_body:{}});
 					});
 	},
-	//删除商品
+	//删除店铺
 	remove(req,res,next){
 		const {_id}=req.body;
-		CakeDao.remove({_id})
+		TypeDao.remove({_id})
 				.then((data)=>{
 					res.json({res_code:1,res_error:"",res_body:{data}});
 				})
@@ -52,20 +59,15 @@ const CakeService = {
 					res.json({res_code:0,res_error:err,res_body:{}});
 				});
 	},
-	//修改商品信息
+	//修改店铺信息
 	update(req,res,next){
-		console.log('1122',req.body)
-		const {_id,name,type,price,comment,store,store_name,type_name} = req.body;
-		var obj={_id,name,type,price,comment,store,store_name,type_name};
+		const {_id,name} = req.body;
+		var obj={_id,name};
 		for(var key in obj){
 			if(!obj[key]) delete obj[key];
 		}
-		if(req.file){
-			let cover="/images/upload/"+req.file.filename;
-			obj.cover=cover;
-		}
-		console.log('修改商品信息',obj);
-		CakeDao.update({_id},obj)
+		console.log('updateType',obj);
+		TypeDao.update({_id},obj)
 				.then((data)=>{
 					res.json({res_code:1,res_error:"",res_body:{data}});
 				})
@@ -73,7 +75,7 @@ const CakeService = {
 					res.json({res_code:0,res_error:err,res_body:{}});
 				});
 	},
-	// 按条件查找商品
+	// 按条件查找店铺
 	find(req, res, next) {
 		//console.log(req.body.info);
 		var {_id}=req.body;
@@ -89,7 +91,8 @@ const CakeService = {
 			//console.log(query);
 			
 		}
-		CakeDao.find(obj)
+		//console.log(obj);
+		TypeDao.find(obj)
 					.then((data)=>{
 						console.log(data);
 						res.json({res_code:1, res_error:"", res_body:{data}});
@@ -97,17 +100,7 @@ const CakeService = {
 					.catch((err)=>{
 						res.json({res_code:1, res_error:err, res_body:{}});
 					});
-	},
-	//查找所有
-	findAll(req,res,next){
-		CakeDao.findAll()
-					.then((data)=>{
-						res.json({res_code:1,res_error:"",res_body:{data}});
-					})
-					.catch((err)=>{
-						res.json({res_code:1,res_error:err,res_body:{}});
-					});
-	},
-}
+		}
+	}
 
-module.exports = CakeService;
+module.exports = TypeService;

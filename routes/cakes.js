@@ -28,6 +28,8 @@ router.post("/delete",CakeService.remove);
 router.post("/update",upload.single("cover"),CakeService.update);
 //按条件查找商品
 router.post("/find",CakeService.find);
+//查找所以
+router.post("/findAll",CakeService.findAll);
 
 
 module.exports = router;
